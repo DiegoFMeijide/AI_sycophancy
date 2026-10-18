@@ -1,4 +1,4 @@
-# Sycophancy en LLMs: un experimento sobre Malvinas y Falkland
+# Sycophancy en LLMs: un experimento sobre las Islas Malvinas
 
 Datos y código de **Diego Fernández Meijide** para reproducir los gráficos y tablas de la nota. El ejercicio reúne 14.400 respuestas de GPT-6 Luna, variando idioma, nombre de las islas, origen declarado, búsqueda y mensaje de mitigación.
 
@@ -30,4 +30,4 @@ Los gráficos están en `output/figures/`, con y sin títulos, en PNG, PDF y SVG
 - [Prompts](data/prompts_144.csv) y [diseño del ejercicio](documents/protocol.md).
 - [Filtros y tamaños de muestra de cada figura](documents/figures.md).
 
-Referencia: Fernández Meijide, Diego (2026). *Sycophancy en LLMs: un experimento sobre Malvinas y Falkland*. Datos y código de replicación.
+Referencia: Fernández Meijide, Diego (2026). *Sycophancy en LLMs: un experimento sobre las Islas Malvinas*. Datos y código de replicación.
