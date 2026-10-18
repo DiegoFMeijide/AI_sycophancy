@@ -17,10 +17,12 @@ if (!identical(args, "--check")) {
   run("code/R/02_descriptives.R", if (file.exists("output/tables/experimento14400_descriptivos_17102026.json")) "--check" else character())
   run("code/R/05_editorial_outputs.R")
   run("code/R/06_argument_mentions.R")
+  run("code/R/07_pooled_search.R")
 }
 run("code/R/04_verify_results.R")
 if (identical(args, "--check")) {
   run("code/R/05_editorial_outputs.R", "--check")
   run("code/R/06_argument_mentions.R", "--check")
+  run("code/R/07_pooled_search.R", "--check")
 }
 cat("\nReplication checks complete. Outputs: output/tables and output/figures.\n")

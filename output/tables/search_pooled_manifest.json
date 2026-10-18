@@ -1,0 +1,200 @@
+{
+  "status": "VERIFIED_OFFLINE_POOLED_SEARCH",
+  "script": "code/R/07_pooled_search.R",
+  "script_sha256": "8e55cbf604f94d84ab62255c321167c2f39df40bc3e6e9bff17ce418bdce0cdd",
+  "source": "data/analysis_14400.csv",
+  "source_sha256": "c7d0078242bff63a44872a5c628700b2ea5fd7e82d3993e5a31d12acf775088a",
+  "input_sha256": {
+    "data/provenance.json": "8c8785900225bc1445a322d9b22ddd07bc1708b2733b6c33cf472d03e66713ea",
+    "data/analysis_14400.csv": "c7d0078242bff63a44872a5c628700b2ea5fd7e82d3993e5a31d12acf775088a"
+  },
+  "output_sha256": {
+    "output/figures/con_titulos/png/search_pooled.png": "e6970e4a0443ff16c1afbcef03102900ab0948f1a5e869c08fa6e9031ff87907",
+    "output/figures/con_titulos/pdf/search_pooled.pdf": "9bc6c29b7204fc2279ba39a0af8dd5733079a42c8534abf0028657349814d340",
+    "output/figures/con_titulos/svg/search_pooled.svg": "c69fd303457d6eacb4ade815c721250171a5c61ab7ca8ee746412b7696085bcf",
+    "output/figures/sin_titulos/png/search_pooled.png": "e54aaff1962170190cbc51962bf1fca4035e8da2492281344432c85dbf1cdc6c",
+    "output/figures/sin_titulos/pdf/search_pooled.pdf": "e41bb5b9230d945766dc1f196b37ba4b3e508684fef3f8239b66c13775df52f6",
+    "output/figures/sin_titulos/svg/search_pooled.svg": "32e6a7e2cf554ef226e979f445a493b02dd162ccd8c56485bd244afa0cdb016c",
+    "output/tables/editorial_search_pooled_counts.csv": "e4d1d843c570839e03025cc98658eae442a2f09dac99fd4fdabe00cd410fc1b7",
+    "output/tables/editorial_search_pooled_ranges.csv": "7c8f684ea70e205ad125197de32583673c65a19c0bbfe92e12f2dce5fb9b1a52",
+    "output/tables/editorial_search_pooled_labels.csv": "60d14d1d809038b745d8f1d156d9fe31daa3c46668516ff41be403b2cde23326"
+  },
+  "filters": {
+    "scale": "BINARY2",
+    "arm": "CONTROL"
+  },
+  "selected_cases": 3600,
+  "groups": {
+    "NO_WEB": {
+      "n": 900,
+      "locations": "HIST_NO_WEB"
+    },
+    "WEB_AUTO": {
+      "n": 2700,
+      "locations": ["HIST_DEFAULT", "GB", "AR"],
+      "n_per_location": 900
+    }
+  },
+  "denominators": {
+    "NO_WEB": {
+      "name": 450,
+      "origin_or_language": 300
+    },
+    "WEB_AUTO": {
+      "name": 1350,
+      "origin_or_language": 900
+    }
+  },
+  "aggregation": "ARG count divided by all cases in each group and signal level, pooling all other conditions. Three web locations have equal sample size.",
+  "search_group_definition": "Assigned tool availability (search_regime), not a filter on realized search_used.",
+  "comparison": "Descriptive pooling of historical and geographic cohorts; not a pure causal effect of enabling search.",
+  "visual": {
+    "points": 16,
+    "lines": 6,
+    "shared_axis": [0, 80],
+    "fill_colors": {
+      "FALSE": "#969DA3",
+      "TRUE": "#6DBBDE"
+    },
+    "shapes": {
+      "NO_WEB": 21,
+      "WEB_AUTO": 22
+    },
+    "width_inches": 16,
+    "heights_inches": {
+      "con_titulos": 9.6,
+      "sin_titulos": 8.6
+    },
+    "line_meaning": "Minimum to maximum marginal percentage, not confidence intervals.",
+    "color_meaning": "Celeste para Malvinas, Buenos Aires y voseo; gris para las demás variantes.",
+    "labels": [
+      {
+        "search_group": "NO_WEB",
+        "factor": "toponym_id",
+        "x": 13.111111111111112,
+        "y": 8.210000000000001,
+        "label": "Falkland · <b>13%<\/b>",
+        "n_points": 1,
+        "levels": "FALKLANDS"
+      },
+      {
+        "search_group": "NO_WEB",
+        "factor": "toponym_id",
+        "x": 54.444444444444443,
+        "y": 8.210000000000001,
+        "label": "Malvinas · <b>54%<\/b>",
+        "n_points": 1,
+        "levels": "MALVINAS"
+      },
+      {
+        "search_group": "NO_WEB",
+        "factor": "origin_id",
+        "x": 22.666666666666664,
+        "y": 5.31,
+        "label": "Londres · <b>20%<\/b><br>No lo dice · <b>26%<\/b>",
+        "n_points": 2,
+        "levels": "LONDON|NONE"
+      },
+      {
+        "search_group": "NO_WEB",
+        "factor": "origin_id",
+        "x": 56.000000000000007,
+        "y": 5.31,
+        "label": "Buenos Aires · <b>56%<\/b>",
+        "n_points": 1,
+        "levels": "BUENOS_AIRES"
+      },
+      {
+        "search_group": "NO_WEB",
+        "factor": "language_level",
+        "x": 23.666666666666668,
+        "y": 2.41,
+        "label": "Inglés · <b>24%<\/b>",
+        "n_points": 1,
+        "levels": "EN"
+      },
+      {
+        "search_group": "NO_WEB",
+        "factor": "language_level",
+        "x": 38.833333333333329,
+        "y": 2.41,
+        "label": "Español neutro · <b>37%<\/b><br>Español con voseo · <b>41%<\/b>",
+        "n_points": 2,
+        "levels": "ES_NEUTRAL|ES_AR"
+      },
+      {
+        "search_group": "WEB_AUTO",
+        "factor": "toponym_id",
+        "x": 25.777777777777779,
+        "y": 7.11,
+        "label": "Falkland · <b>26%<\/b>",
+        "n_points": 1,
+        "levels": "FALKLANDS"
+      },
+      {
+        "search_group": "WEB_AUTO",
+        "factor": "toponym_id",
+        "x": 56.962962962962962,
+        "y": 7.11,
+        "label": "Malvinas · <b>57%<\/b>",
+        "n_points": 1,
+        "levels": "MALVINAS"
+      },
+      {
+        "search_group": "WEB_AUTO",
+        "factor": "origin_id",
+        "x": 29.111111111111111,
+        "y": 4.21,
+        "label": "Londres · <b>29%<\/b>",
+        "n_points": 1,
+        "levels": "LONDON"
+      },
+      {
+        "search_group": "WEB_AUTO",
+        "factor": "origin_id",
+        "x": 39.666666666666664,
+        "y": 4.21,
+        "label": "No lo dice · <b>40%<\/b>",
+        "n_points": 1,
+        "levels": "NONE"
+      },
+      {
+        "search_group": "WEB_AUTO",
+        "factor": "origin_id",
+        "x": 55.333333333333336,
+        "y": 4.21,
+        "label": "Buenos Aires · <b>55%<\/b>",
+        "n_points": 1,
+        "levels": "BUENOS_AIRES"
+      },
+      {
+        "search_group": "WEB_AUTO",
+        "factor": "language_level",
+        "x": 25.777777777777779,
+        "y": 1.31,
+        "label": "Inglés · <b>26%<\/b>",
+        "n_points": 1,
+        "levels": "EN"
+      },
+      {
+        "search_group": "WEB_AUTO",
+        "factor": "language_level",
+        "x": 49.166666666666671,
+        "y": 1.31,
+        "label": "Español neutro · <b>49%<\/b><br>Español con voseo · <b>50%<\/b>",
+        "n_points": 2,
+        "levels": "ES_NEUTRAL|ES_AR"
+      }
+    ],
+    "footnotes": false
+  },
+  "packages": {
+    "ggplot2": "4.0.1",
+    "ggtext": "0.1.2",
+    "jsonlite": "2.0.0",
+    "digest": "0.6.39",
+    "ragg": "1.5.0",
+    "svglite": "2.2.2"
+  },
+  "network_used": false
+}
