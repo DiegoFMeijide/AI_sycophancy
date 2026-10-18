@@ -1,5 +1,5 @@
 #!/usr/bin/env Rscript
-# Offline regression tests against the audited pre-publication CSV outputs.
+# Offline verification against the audited descriptive CSV outputs.
 # This verifier does not write files. Run from the repository root.
 suppressPackageStartupMessages({library(jsonlite); library(digest)})
 options(stringsAsFactors = FALSE)
@@ -25,17 +25,16 @@ stopifnot(length(unique(cluster[d$scale_id == "ORDINAL5"])) == 150L,
   length(unique(cluster[d$scale_id == "BINARY2"])) == 100L)
 
 lines <- readLines("expected/SHA256SUMS", warn = FALSE)
-stopifnot(length(lines) >= 22L, all(grepl("^[0-9a-f]{64}  [A-Za-z0-9_]+\\.csv$", lines)))
+stopifnot(length(lines) == 12L, all(grepl("^[0-9a-f]{64}  [A-Za-z0-9_]+\\.csv$", lines)))
 expected_hash <- substr(lines, 1, 64)
 files <- substring(lines, 67)
 stopifnot(!anyDuplicated(files))
 for(i in seq_along(files))stopifnot(sha(file.path("expected",files[i]))==expected_hash[i])
 main_analysis <- startsWith(files, "experimento14400_")
-stopifnot(sum(main_analysis) == 22L)
+stopifnot(sum(main_analysis) == 9L)
 files <- files[main_analysis]; expected_hash <- expected_hash[main_analysis]
-exact_numeric <- c("n", "arg_n", "balanced_n", "gbr_n", "ARG_CLEAR", "ARG_SOME", "BALANCED", "GBR_SOME", "GBR_CLEAR",
-  "recovered_n", "metadata_flagged_n", "source_block_number", "n_clusters", "standardization_rows", "n_standardization_rows",
-  "df", "holm_family_tests", "n_parameters", "rank", "ci_df", "iterations", "outside_unit_interval_n", "outside_n")
+exact_numeric <- c("n","arg_n","balanced_n","gbr_n","ARG_CLEAR","ARG_SOME","BALANCED","GBR_SOME","GBR_CLEAR",
+ "recovered_n","metadata_flagged_n","source_block_number")
 summary_rows <- list()
 for (i in seq_along(files)) {
   reference <- file.path("expected", files[i])
@@ -44,8 +43,7 @@ for (i in seq_along(files)) {
   x <- read.csv(produced, check.names = FALSE)
   y <- read.csv(reference, check.names = FALSE)
   if (!identical(names(x), names(y)) || nrow(x) != nrow(y)) stop("Schema mismatch: ", files[i])
-  modeled <- grepl("model_|prediction_context|logit_sensitivity|comparison_lpm", files[i])
-  tolerance <- if (modeled) 1e-6 else 1e-10
+  tolerance <- 1e-10
   maximum_absolute_difference <- 0
   for (nm in names(x)) {
     a <- x[[nm]]; b <- y[[nm]]
@@ -74,17 +72,10 @@ for (i in seq_len(nrow(c))) {
   stopifnot(nrow(z) == c$n[i], sum(z$arg) == c$arg_n[i],
     sum(z$balanced) == c$balanced_n[i], sum(z$gbr) == c$gbr_n[i])
 }
-main <- fromJSON("output/tables/experimento14400_resultados_17102026.json")
-multi <- fromJSON("output/tables/experimento14400_multinomial_resultados_17102026.json")
-stopifnot(nrow(main$model_coefficients) == 245L, nrow(multi$model_coefficients) == 98L,
-  nrow(main$model_effects) == 405L, nrow(multi$model_effects) == 243L,
-  nrow(main$model_interactions) == 185L, nrow(multi$model_interactions) == 111L,
-  nrow(main$model_probabilities) == 40L, nrow(multi$model_probabilities) == 24L,
-  multi$model_diagnostics$convergence_code == 0L, multi$model_diagnostics$hessian_rank == 98L,
-  multi$model_diagnostics$outside_unit_interval_n == 0L,
-  all(main$model_diagnostics$converged), main$quality$pilots == 0L,
-  main$provenance$source_csv_sha256 == sha("data/analysis_14400.csv"),
-  multi$provenance$source_csv_sha256 == sha("data/analysis_14400.csv"))
-cat("VERIFY_OK: 14,400 official cases, 288 cells, 22 historical reference CSVs, 343 coefficients, 648 marginal effects, 296 gap changes, 64 probabilities.\n")
-print(do.call(rbind, summary_rows), row.names = FALSE)
-cat("No files written; no API calls; pilot responses excluded.\n")
+main <- fromJSON("output/tables/experimento14400_descriptivos_17102026.json")
+stopifnot(main$total_responses==14400L,main$conditions==288L,
+ main$source_sha256==sha("data/analysis_14400.csv"),
+ main$script_sha256==sha("code/R/02_descriptives.R"))
+cat("VERIFY_OK: 14,400 official cases, 288 cells, nine descriptive reference CSVs, 250 recorded blocks.\n")
+print(do.call(rbind, summary_rows), row.names=FALSE)
+cat("No files written; no API calls.\n")

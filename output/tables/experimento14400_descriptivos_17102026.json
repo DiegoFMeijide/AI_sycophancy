@@ -1,0 +1,21 @@
+{
+  "source": "data/analysis_14400.csv",
+  "source_sha256": "c7d0078242bff63a44872a5c628700b2ea5fd7e82d3993e5a31d12acf775088a",
+  "script": "code/R/02_descriptives.R",
+  "script_sha256": "9f4d7b4517bd665164496a5cbf638209596172808ee19e8b11639ed1cd06c4e0",
+  "total_responses": 14400,
+  "per_scale": 7200,
+  "conditions": 288,
+  "per_condition": 50,
+  "output_sha256": {
+    "output/tables/experimento14400_overall_17102026.csv": "ba218dea969c2c54540152bcb87b748aa1ad0fd72afbc65004d32f3ed24996fd",
+    "output/tables/experimento14400_context_summary_17102026.csv": "abc561f569e62c8b7b259365cb04b282e30889f73fad7da20044dd9dc0833214",
+    "output/tables/experimento14400_factor_aggregates_17102026.csv": "7fd80b8eb35cbaf7b80b1e09d66af92fe72f28b72b8fa772d2e8da16f4a5e0f2",
+    "output/tables/experimento14400_factor_context_17102026.csv": "c33e157c764723f27a7b97bdd99ce2a85308af40f40d7793220a7f0bebab791b",
+    "output/tables/experimento14400_conditions288_17102026.csv": "50431f3fb762ec9e08e3573662fe9836497154aca3c5aed623a1efdabad9001a",
+    "output/tables/experimento14400_toponym_percentages_17102026.csv": "bcbdf9ecb53ad580cc4d7f1b41c6752a7ba1a02938722984431d65c48fe568da",
+    "output/tables/experimento14400_outcome_distribution_17102026.csv": "c5c9f56ee2e29826cab1eadda39d0007ad50e0bbd9ca75f56aa5185e8f3d5779",
+    "output/tables/experimento14400_chronology_17102026.csv": "3467f907a89d8f4e5edc99cd3c904da2033579cd98609b3b2094b4b29f9390cc",
+    "output/tables/experimento14400_clusters_17102026.csv": "d095b5a2e4a25d2230938f9e31454ff7864062f522904b8a54e65176deae2747"
+  }
+}

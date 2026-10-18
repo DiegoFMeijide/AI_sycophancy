@@ -2,7 +2,7 @@
 
 ## Unidad de observación y selección
 
-`data/analysis_14400.csv` contiene **una respuesta válida seleccionada por consulta experimental**: 14.400 filas, 288 condiciones de 50 casos y 7.200 respuestas por escala. No contiene pilotos. Los 26 intentos fallidos oficiales no son observaciones adicionales: están en un archivo separado y corresponden a 24 consultas recuperadas.
+`data/analysis_14400.csv` contiene **una respuesta por consulta experimental**: 14.400 filas, 288 condiciones de 50 casos y 7.200 respuestas por escala. Los 26 intentos fallidos están en un archivo separado y corresponden a 24 consultas recuperadas.
 
 Los CSV usan UTF-8, coma como separador y comillas para textos. Las explicaciones y los prompts pueden contener saltos de línea; no contar filas mediante el número de líneas del archivo. `r` se debe leer como texto. Los campos no aplicables se escriben vacíos.
 
@@ -56,11 +56,11 @@ Los CSV usan UTF-8, coma como separador y comillas para textos. Las explicacione
 
 ## Materiales de recolección
 
-- **`prompts_144.csv`**: los 144 textos distintos realmente enviados. Incluye `prompt_id`, `prompt_sha256`, escala, brazo, idioma, topónimo, origen, orientación y `prompt`. Su contenido se contrastó con cada reserva original, no se reconstruyó a partir de una plantilla posterior.
-- **`request_templates_576.json`**: 576 cuerpos de solicitud distintos. Cada elemento contiene identificadores de plantilla/prompt/mapa, escala, entorno y `request`. El cuerpo conserva los valores semánticos enviados, incluidos el mensaje literal, schema, herramientas y parámetros. La indentación y el orden de serialización JSON pueden diferir de la solicitud original; no contiene headers de autenticación.
+- **`prompts_144.csv`**: los 144 textos distintos enviados, con sus identificadores, hashes y condiciones.
+- **`request_templates_576.json`**: 576 cuerpos de solicitud distintos, con mensaje, schema, herramientas y parámetros.
 - **`response_mappings.json`**: cuatro mapas: dos orientaciones por escala. `response_mapping` convierte el código numérico en `choice_id`.
 - **`request_assignment_14400.csv`**: enlace de cada consulta a plantilla/prompt/mapa, `execution_order`, `within_block_order` y `question_country_order`. Este último se deriva del protocolo: siempre `ARG_FIRST` en ordinal y la orientación sorteada en binario. Las órdenes originales pertenecen a su calendario; no deben interpretarse como una única secuencia global de las 14.400 consultas.
-- **`failed_attempts_26.csv`**: intentos fallidos oficiales, sin respuestas ni mensajes de error libres. Incluye ID sintético de consulta/tanda, intento, orden cronológico dentro de la consulta, escala/brazo/entorno, prompt, fechas y clase/HTTP del error. `analytic_row_included=FALSE`. Se excluyeron todos los fallos de pilotos.
+- **`failed_attempts_26.csv`**: intentos fallidos, con identificadores, condiciones, fechas y clase de error. `analytic_row_included=FALSE`.
 
 ## Metadatos web
 
@@ -71,10 +71,10 @@ Los CSV usan UTF-8, coma como separador y comillas para textos. Las explicacione
 - `sources`: lista de metadatos `type` y `url`; conserva registros repetidos. No son necesariamente fuentes citadas ni leídas por completo.
 - `citations`: `type`, `url`, `title`, `start_index` y `end_index`. Los offsets son los originales de la respuesta serializada, **no posiciones dentro del campo `e` del CSV**.
 
-Se preservan 90.133 registros de consultas, 603.551 registros de fuentes y 11.100 citas. Los metadatos no incluyen cuerpos de páginas, snippets, capturas, contenido de razonamiento ni IDs de los eventos del proveedor. URLs no HTTP(S), con credenciales incrustadas, destinos locales o parámetros sensibles se sustituyen por `null`; `data/provenance.json` informa cuántas se retuvieron por esta política. Los títulos y URLs son metadatos de terceros, no una licencia de sus contenidos.
+Hay 90.133 registros de consultas, 603.551 registros de fuentes y 11.100 citas. No se incluyen los textos de las páginas. Las URLs retiradas por privacidad figuran como `null`.
 
-## Procedencia y privacidad
+## Procedencia
 
-`provenance.json` identifica las fuentes locales por **nombre de archivo y SHA256**, describe la selección y contiene `output_sha256`, un objeto de hashes de cada archivo público de datos. No publica carpetas personales, IDs de organización/proyecto/cuenta, credenciales, headers, archivos de autorización, objetos de facturación, identificadores de respuesta del proveedor ni registros de pilotos.
+`provenance.json` registra la procedencia y las huellas SHA256 de los archivos de datos.
 
 Los perfiles del experimento son sintéticos; los tamaños de muestra cuentan respuestas del modelo, no personas. Los nombres propios o afirmaciones presentes en `e` pueden ser contenido generado por el modelo y no deben considerarse comprobados.

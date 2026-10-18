@@ -3,7 +3,7 @@
 args <- commandArgs(trailingOnly = TRUE)
 if (length(args) && !identical(args, "--check")) stop("Usage: Rscript run_all.R [--check]")
 stopifnot(file.exists("data/provenance.json"), file.exists("code/R/01_validate.R"))
-packages <- c("jsonlite", "digest", "dplyr", "tidyr", "sandwich", "nnet",
+packages <- c("jsonlite", "digest", "dplyr", "tidyr",
               "ggplot2", "ggtext", "binom", "ragg", "svglite", "officer", "flextable", "stringi", "xml2", "zip")
 missing <- packages[!vapply(packages, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1))]
 if (length(missing)) stop("Install packages first: Rscript install_packages.R. Missing: ", paste(missing, collapse = ", "))
@@ -14,8 +14,7 @@ run <- function(path, extra = character()) {
 }
 run("code/R/01_validate.R")
 if (!identical(args, "--check")) {
-  run("code/R/02_analyze_14400.R", if (file.exists("output/tables/experimento14400_resultados_17102026.json")) "--check" else character())
-  run("code/R/03_multinomial.R", if (file.exists("output/tables/experimento14400_multinomial_resultados_17102026.json")) "--check" else character())
+  run("code/R/02_descriptives.R", if (file.exists("output/tables/experimento14400_descriptivos_17102026.json")) "--check" else character())
   run("code/R/05_editorial_outputs.R")
   run("code/R/06_argument_mentions.R")
 }
