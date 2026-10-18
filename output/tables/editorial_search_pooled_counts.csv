@@ -1,17 +1,17 @@
-"search_group","factor","signal","level","label","denominator","argentina_n","argentina_pct","argentine_variant","rounded_pct","plot_y"
-"NO_WEB","toponym_id","Nombre","FALKLANDS","Falkland",450,59,13.1111111111111,FALSE,13,8.05
-"NO_WEB","toponym_id","Nombre","MALVINAS","Malvinas",450,245,54.4444444444444,TRUE,54,8.05
-"NO_WEB","origin_id","Origen declarado","LONDON","Londres",300,59,19.6666666666667,FALSE,20,5.15
-"NO_WEB","origin_id","Origen declarado","NONE","No lo dice",300,77,25.6666666666667,FALSE,26,5.15
-"NO_WEB","origin_id","Origen declarado","BUENOS_AIRES","Buenos Aires",300,168,56,TRUE,56,5.15
-"NO_WEB","language_level","Idioma","EN","Inglés",300,71,23.6666666666667,FALSE,24,2.25
-"NO_WEB","language_level","Idioma","ES_NEUTRAL","Español neutro",300,111,37,FALSE,37,2.25
-"NO_WEB","language_level","Idioma","ES_AR","Español con voseo",300,122,40.6666666666667,TRUE,41,2.25
-"WEB_AUTO","toponym_id","Nombre","FALKLANDS","Falkland",1350,348,25.7777777777778,FALSE,26,6.95
-"WEB_AUTO","toponym_id","Nombre","MALVINAS","Malvinas",1350,769,56.962962962963,TRUE,57,6.95
-"WEB_AUTO","origin_id","Origen declarado","LONDON","Londres",900,262,29.1111111111111,FALSE,29,4.05
-"WEB_AUTO","origin_id","Origen declarado","NONE","No lo dice",900,357,39.6666666666667,FALSE,40,4.05
-"WEB_AUTO","origin_id","Origen declarado","BUENOS_AIRES","Buenos Aires",900,498,55.3333333333333,TRUE,55,4.05
-"WEB_AUTO","language_level","Idioma","EN","Inglés",900,232,25.7777777777778,FALSE,26,1.15
-"WEB_AUTO","language_level","Idioma","ES_NEUTRAL","Español neutro",900,437,48.5555555555556,FALSE,49,1.15
-"WEB_AUTO","language_level","Idioma","ES_AR","Español con voseo",900,448,49.7777777777778,TRUE,50,1.15
+"search_group","factor","signal","level","label","denominator","argentina_n","argentina_pct","argentine_variant","rounded_pct","lower","upper","plot_y"
+"NO_WEB","toponym_id","Nombre","FALKLANDS","Falkland",450,59,13.1111111111111,FALSE,13,9.99262578473558,16.2295964374866,-1.05
+"NO_WEB","toponym_id","Nombre","MALVINAS","Malvinas",450,245,54.4444444444444,TRUE,54,49.8430518089548,59.0458370799341,-2.2
+"NO_WEB","origin_id","Origen declarado","LONDON","Londres",300,59,19.6666666666667,FALSE,20,15.1688604947873,24.164472838546,-4.75
+"NO_WEB","origin_id","Origen declarado","NONE","No lo dice",300,77,25.6666666666667,FALSE,26,20.723969494364,30.6093638389693,-5.9
+"NO_WEB","origin_id","Origen declarado","BUENOS_AIRES","Buenos Aires",300,168,56,TRUE,56,50.3829561350623,61.6170438649377,-7.05
+"NO_WEB","language_level","Idioma","EN","Inglés",300,71,23.6666666666667,FALSE,24,18.8570205348593,28.476312798474,-9.6
+"NO_WEB","language_level","Idioma","ES_NEUTRAL","Español neutro",300,111,37,FALSE,37,31.5366553250968,42.4633446749032,-10.75
+"NO_WEB","language_level","Idioma","ES_AR","Español con voseo",300,122,40.6666666666667,TRUE,41,35.1081856674556,46.2251476658777,-11.9
+"WEB_AUTO","toponym_id","Nombre","FALKLANDS","Falkland",1350,348,25.7777777777778,FALSE,26,23.44447595123,28.1110796043256,-1.05
+"WEB_AUTO","toponym_id","Nombre","MALVINAS","Malvinas",1350,769,56.962962962963,TRUE,57,54.3217788615688,59.6041470643571,-2.2
+"WEB_AUTO","origin_id","Origen declarado","LONDON","Londres",900,262,29.1111111111111,FALSE,29,26.1432381177553,32.0789841044669,-4.75
+"WEB_AUTO","origin_id","Origen declarado","NONE","No lo dice",900,357,39.6666666666667,FALSE,40,36.4705814544393,42.8627518788941,-5.9
+"WEB_AUTO","origin_id","Origen declarado","BUENOS_AIRES","Buenos Aires",900,498,55.3333333333333,TRUE,55,52.085363216865,58.5813034498017,-7.05
+"WEB_AUTO","language_level","Idioma","EN","Inglés",900,232,25.7777777777778,FALSE,26,22.9200783323047,28.6354772232508,-9.6
+"WEB_AUTO","language_level","Idioma","ES_NEUTRAL","Español neutro",900,437,48.5555555555556,FALSE,49,45.2903123016988,51.8207988094123,-10.75
+"WEB_AUTO","language_level","Idioma","ES_AR","Español con voseo",900,448,49.7777777777778,TRUE,50,46.5112033998187,53.0443521557369,-11.9

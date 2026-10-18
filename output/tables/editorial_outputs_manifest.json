@@ -3,7 +3,7 @@
   "source": "data/analysis_14400.csv",
   "source_sha256": "c7d0078242bff63a44872a5c628700b2ea5fd7e82d3993e5a31d12acf775088a",
   "script": "code/R/05_editorial_outputs.R",
-  "script_sha256": "2cdfd6d44c2fa876bd7e8cb7411b543f92148811651cc149bd47838a5d5ac0f9",
+  "script_sha256": "a0b6c344bc40cd49983320b582eaf518724bfe75cc916a7dbcf14d391d038a6c",
   "metadata_helper": "code/R/scrub_docx.R",
   "metadata_helper_sha256": "f4e500d705758656c67529c419f2eaab26adcf402b3821c1c82e78fe4ef37859",
   "official_cases": 14400,
@@ -28,12 +28,12 @@
     "output/figures/sin_titulos/png/search_environments.png": "ae8b1324d6db42358e61dbb3065e4754e493e6e17c8632c0de3fbd1a02437a5e",
     "output/figures/sin_titulos/pdf/search_environments.pdf": "e3bf670a6f169d2acda6b32dc6a135949142b9ed05bb49ec71dfe41c3b4ba01a",
     "output/figures/sin_titulos/svg/search_environments.svg": "2ee787f7e28cad753caac35b04b7ca97caa547b0236949959f3fa70aeccadff1",
-    "output/figures/con_titulos/png/mitigation_signals.png": "85a1fac436d410e475fe99cdc32026d99df8b9dd4f9b75d3ce1d5fd226b71da1",
-    "output/figures/con_titulos/pdf/mitigation_signals.pdf": "a507e23ea93f455c8400998c3ca588408f43122309bf7745a2808c8b11eae60e",
-    "output/figures/con_titulos/svg/mitigation_signals.svg": "8232e141fbfa5c042d9e71cde4aedf2e1e7c6df79aec04b696b51dcee6809791",
-    "output/figures/sin_titulos/png/mitigation_signals.png": "beac0357ee2efbea9df4011c4ff8c4a2dfdcc6864104990c02c511c2df098a0a",
-    "output/figures/sin_titulos/pdf/mitigation_signals.pdf": "a2d0230ba8fdbeaabf6cb9e707f8a1103dc0ec5c239f5f391079060d2420d2c2",
-    "output/figures/sin_titulos/svg/mitigation_signals.svg": "ae2960a47396a5d77adb634fea2cf00ef3125c4a9c50ac756a1ad3893df738cd",
+    "output/figures/con_titulos/png/mitigation_signals.png": "fce92d04a1a1f0d1dc20f94f03f6bd444af60876ec70a3d533f7183997f20f4e",
+    "output/figures/con_titulos/pdf/mitigation_signals.pdf": "2ad6fbf5f7dcacabbd0f2e3e4398564394fb04aee18c9b92dfc336ec46fb0b33",
+    "output/figures/con_titulos/svg/mitigation_signals.svg": "922236011ecedcf4574eac933af8a5750e4e69d2ec5bfed7477096bf596cab20",
+    "output/figures/sin_titulos/png/mitigation_signals.png": "3807e8a61dcde9715b241a4d5affe924b6744270f5c5fb7002eaefcb7f2b22bf",
+    "output/figures/sin_titulos/pdf/mitigation_signals.pdf": "a30b3cb4a1de0a5476d0de3c980902072a52215069773eabaf157b121ce2302e",
+    "output/figures/sin_titulos/svg/mitigation_signals.svg": "d5742ae4ef5418d73e2c16234a2d82d49ef4bfe6bdf0bcd5e92a658c6482dbbd",
     "output/figures/con_titulos/png/control_signals.png": "9fdece5649448f6c04fd327641aa96eb8fb5903571ca0d360e8f3bde83f910e9",
     "output/figures/con_titulos/pdf/control_signals.pdf": "b34abecff94bf916a576014ee81edd7f9f76cfba0cd425685215f7635ef45beb",
     "output/figures/con_titulos/svg/control_signals.svg": "98962999552d6e48304321dba231a46c7f43c0714d7c13c73b04e97b9670587f",
@@ -65,7 +65,7 @@
     "output/figures/sin_titulos/pdf/profiles_mitigation_binary.pdf": "052b4365bf6a0f923d8d1890fabb279ef8db3314dd8b6cbd6bade55d68710a36",
     "output/figures/sin_titulos/svg/profiles_mitigation_binary.svg": "997058e9e2bd2f8cf2241395d3a95004254e05d3d00810750dbb49c7edfd2f52",
     "output/tables/editorial_search_environment_counts.csv": "f4ca3d25170e814852309e58e8ef969042609931933802af6c08e2750a075604",
-    "output/tables/editorial_mitigation_counts.csv": "35470cef4e963b1db953d5870482a0422e7607b7ff33c03f49b883199d41b596",
+    "output/tables/editorial_mitigation_counts.csv": "2bc234418219af859899c4e6450992c824121a156c0af343b20c2e4f16b450bb",
     "output/tables/editorial_profile_counts.csv": "2f9ac44c5af718a9d9a9205d93ddb45b859de253ebf9aa27e901490741558245",
     "output/tables/editorial_origin_language_counts.csv": "b42bec0bf75ea6ffc82317c60614b7159d3c4159f5f22d67d5fbf1c3577bc1b8",
     "output/tables/editorial_origin_language_matrix.csv": "6da50dbd6456cafeb28ffe575f9715dc74548823da7cdf5fd083f6b39fe58719",
@@ -85,5 +85,12 @@
     "xml2": "1.5.2",
     "zip": "2.3.3"
   },
-  "network_used": false
+  "network_used": false,
+  "mitigation_visual": {
+    "kind": "faceted horizontal bars",
+    "panels": 2,
+    "bars": 24,
+    "shared_axis": [0, 70],
+    "interval": "95% pointwise normal (Wald), binom::binom.confint(methods='asymptotic')"
+  }
 }

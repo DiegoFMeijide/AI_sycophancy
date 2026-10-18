@@ -3,7 +3,9 @@
 # Run from the package root: Rscript code/R/05_editorial_outputs.R
 # Existing generated outputs are verified, not silently replaced. --overwrite
 # regenerates only the output files owned by this script; --check never writes.
-run_editorial_outputs <- function(data = NULL, root = ".", overwrite = FALSE, check = FALSE) {
+run_editorial_outputs <- function(data = NULL, root = ".", overwrite = FALSE, check = FALSE,
+                                  refresh_mitigation = FALSE) {
+  stopifnot(!refresh_mitigation || (!check && !overwrite))
   packages <- c("ggplot2", "ggtext", "binom", "jsonlite", "digest", "ragg", "svglite",
                 "officer", "flextable", "xml2", "zip")
   missing <- packages[!vapply(packages, requireNamespace, logical(1), quietly = TRUE)]
@@ -226,96 +228,91 @@ run_editorial_outputs <- function(data = NULL, root = ".", overwrite = FALSE, ch
     make_plot
   })
 
+  # Pointwise confidence intervals are calculated by binom, not by a manual formula.
+  mitigation_ci <- binom::binom.confint(mitigation_counts$argentina_n,
+    mitigation_counts$denominator,conf.level=.95,methods="asymptotic")
+  stopifnot(nrow(mitigation_ci)==nrow(mitigation_counts),
+    all(mitigation_ci$method=="asymptotic"),
+    all(abs(100*mitigation_ci$mean-mitigation_counts$argentina_pct)<1e-12))
+  mitigation_counts$lower <- 100*mitigation_ci$lower
+  mitigation_counts$upper <- 100*mitigation_ci$upper
+  mitigation_counts$label[mitigation_counts$factor=="location" &
+    mitigation_counts$level=="HIST_NO_WEB"] <- "Sin búsqueda en internet"
   mitigation_plot <- local({
-    counts <- mitigation_counts; ranges <- mitigation_ranges
+    counts <- mitigation_counts
+    names(counts)[names(counts)=="arm"] <- "group"
+    groups <- c("CONTROL", "MITIGATION")
     factors <- c("toponym_id", "origin_id", "location", "language_level")
-    signal_labels <- c("Nombre", "Origen declarado", "Ubicación del buscador\nen la API", "Idioma")
-    centers <- setNames(c(10.4, 7.5, 4.6, 1.7), factors)
-    offsets <- setNames(c(.55, -.55), arms)
-    counts$plot_y <- unname(centers[counts$factor] + offsets[counts$arm])
-    ranges$plot_y <- unname(centers[ranges$factor] + offsets[ranges$arm])
-    for (i in seq_len(nrow(ranges))) {
-      x <- counts$argentina_pct[counts$arm == ranges$arm[i] & counts$factor == ranges$factor[i]]
-      stopifnot(abs(min(x) - ranges$minimum_pct[i]) < 1e-10,
-                abs(max(x) - ranges$maximum_pct[i]) < 1e-10)
-    }
-    # Se agrupan sólo textos, nunca puntos ni porcentajes. Cada nivel sigue visible.
-    label_rows <- list()
-    for (arm in arms) for (f in factors) {
-      z <- counts[counts$arm == arm & counts$factor == f, ]
-      z <- z[order(z$argentina_pct), ]
-      z$cluster <- cumsum(c(TRUE, diff(z$argentina_pct) >= 10))
-      for (cl in unique(z$cluster)) {
-        q <- z[z$cluster == cl, ]
-        label_rows[[length(label_rows) + 1L]] <- data.frame(arm = arm, factor = f,
-          x = mean(range(q$argentina_pct)), y = q$plot_y[1] + .16,
-          label = paste0(q$label, " · <b>", q$rounded_pct, "%</b>", collapse = "<br>"),
-          n_points = nrow(q), levels = paste(q$level, collapse = "|"))
+    counts$group <- factor(counts$group, levels = groups)
+    headers <- list(); axis_rows <- list(); cursor <- 0
+    for (f in factors) {
+      q <- counts[counts$factor == f & counts$group == "CONTROL", ]
+      headers[[length(headers) + 1L]] <- data.frame(y = -cursor, text = q$signal[1])
+      cursor <- cursor + 1.05
+      for (i in seq_len(nrow(q))) {
+        counts$plot_y[counts$factor == f & counts$level == q$level[i]] <- -cursor
+        axis_rows[[length(axis_rows) + 1L]] <- data.frame(y = -cursor, label = q$label[i])
+        cursor <- cursor + 1.15
       }
+      cursor <- cursor + .35
     }
-    labels <- do.call(rbind, label_rows)
-    stopifnot(sum(labels$n_points) == 24L)
-    counts$arm <- factor(counts$arm, levels = arms)
-    ranges$arm <- factor(ranges$arm, levels = arms)
-    fill_colors <- c("FALSE" = "#969DA3", "TRUE" = "#6DBBDE")
-    point_outline <- "#606C76"
-    line_color <- "#BFC5CA"
-    shapes <- c(CONTROL = 21, MITIGATION = 22)
-    line_types <- c(CONTROL = "solid", MITIGATION = "solid")
-    legend_labels <- c("Sin mitigación", "Con mitigación")
-    make_plot <- function(titled = TRUE) {
+    headers <- do.call(rbind, headers); axis_rows <- do.call(rbind, axis_rows)
+    fills <- c("FALSE" = "#969DA3", "TRUE" = "#6DBBDE")
+    make_plot <- function(titled) {
       p <- ggplot() +
-        geom_hline(yintercept = c(8.95, 6.35, 3.15), colour = "#E8EAEC", linewidth = .4) +
-        geom_segment(data = ranges, aes(x = minimum_pct, xend = maximum_pct,
-          y = plot_y, yend = plot_y, linetype = arm), colour = line_color, linewidth = 1.1, lineend = "round") +
-        geom_point(data = counts, aes(x = argentina_pct, y = plot_y, fill = argentine_variant, shape = arm),
-          colour = point_outline, size = 3.8, stroke = .65) +
-        ggtext::geom_richtext(data = labels, aes(x = x, y = y, label = label),
-          colour = "black", fill = NA, label.color = NA, size = 5.1, vjust = 0, hjust = .5,
-          label.padding = grid::unit(rep(0, 4), "pt"), lineheight = 1.1, family = "sans") +
-        scale_fill_manual(values = fill_colors, guide = "none") +
-        scale_linetype_manual(values = line_types, breaks = arms, labels = legend_labels, name = NULL) +
-        scale_shape_manual(values = shapes, breaks = arms, labels = legend_labels, name = NULL) +
-        scale_x_continuous(limits = c(0, 65), breaks = seq(0, 60, 10),
+        geom_rect(data = headers, aes(xmin = 0, xmax = 70, ymin = y - .38, ymax = y + .4),
+          fill = "white", colour = NA) +
+        geom_rect(data = counts, aes(xmin = 0, xmax = argentina_pct,
+          ymin = plot_y - .31, ymax = plot_y + .31, fill = argentine_variant),
+          colour = "#606C76", linewidth = .35) +
+        geom_errorbar(data = counts, aes(y = plot_y, xmin = lower, xmax = upper),
+          orientation = "y", width = .26, linewidth = .65, colour = "#34434C") +
+        geom_text(data = counts, aes(x = upper + 1.4, y = plot_y,
+          label = paste0(rounded_pct, "%")), size = 5.1, hjust = 0,
+          fontface = "bold", family = "sans", colour = "black") +
+        geom_text(data = headers, aes(x = 0, y = y, label = text), hjust = 0,
+          fontface = "bold", family = "sans", size = 5.8, colour = "black") +
+        facet_wrap(vars(group), nrow = 1, scales = "fixed",
+          labeller = as_labeller(c(CONTROL = "Sin mitigación", MITIGATION = "Con mitigación"))) +
+        scale_fill_manual(values = fills, guide = "none") +
+        scale_x_continuous(limits = c(0, 70), breaks = seq(0, 60, 20),
           labels = function(x) paste0(x, "%"), expand = expansion(mult = 0)) +
-        scale_y_continuous(limits = c(.5, 11.7), breaks = unname(centers), labels = signal_labels,
-          expand = expansion(mult = 0)) +
-        labs(title = "Elección de Argentina, con y sin mitigación",
-          subtitle = "Elección forzada · 3.600 respuestas por brazo\nPorcentajes agrupando las demás condiciones de la consulta",
-          x = "Respuestas que eligen Argentina", y = NULL, caption = NULL) +
-        guides(linetype = guide_legend(nrow = 1, byrow = TRUE),
-          shape = guide_legend(nrow = 1, byrow = TRUE, override.aes = list(fill = "#6DBBDE"))) +
+        scale_y_continuous(limits = c(min(counts$plot_y) - .75, .65),
+          breaks = axis_rows$y, labels = axis_rows$label, expand = expansion(mult = 0)) +
+        labs(x = "Respuestas que eligen Argentina", y = NULL,
+          title = if (titled) "Elección de Argentina, con y sin mitigación" else NULL,
+          subtitle = if (titled) "Elección forzada · 7.200 respuestas · 3.600 por panel · IC del 95%" else NULL,
+          caption = NULL) +
         theme_minimal(base_size = 17, base_family = "sans") +
         theme(panel.grid.major.y = element_blank(), panel.grid.minor = element_blank(),
           panel.grid.major.x = element_line(colour = "#EBEEF0", linewidth = .35),
-          axis.text.x = element_text(size = 18, colour = "black"),
-          axis.text.y = element_text(size = 21, face = "bold", colour = "black", margin = margin(r = 18)),
-          axis.title.x = element_text(size = 19, colour = "black", margin = margin(t = 14)),
+          panel.spacing.x = grid::unit(42, "pt"),
+          axis.text.x = element_text(size = 17, colour = "black"),
+          axis.text.y = element_text(size = 17, colour = "black", margin = margin(r = 12)),
+          axis.title.x = element_text(size = 19, colour = "black", margin = margin(t = 15)),
           axis.line.x = element_line(colour = "#AFB8BF", linewidth = .4),
-          legend.position = "top", legend.justification = "left",
-          legend.text = element_text(size = 19, colour = "black", lineheight = 1.1),
-          legend.key.width = grid::unit(31, "pt"), legend.spacing.x = grid::unit(18, "pt"),
-          legend.margin = margin(t = 6, b = 16),
+          strip.text = element_text(size = 21, face = "bold", colour = "black", margin = margin(b = 15)),
+          strip.background = element_blank(), legend.position = "none",
           plot.title = element_text(size = 27, face = "bold", colour = "black", margin = margin(b = 10)),
-          plot.subtitle = element_text(size = 16, colour = "black", lineheight = 1.2, margin = margin(b = 6)),
-          plot.title.position = "plot", plot.margin = margin(22, 32, 20, 20),
+          plot.subtitle = element_text(size = 17, colour = "black", margin = margin(b = 20)),
+          plot.title.position = "plot", plot.margin = margin(22, 30, 20, 20),
           plot.background = element_rect(fill = "white", colour = NA))
-      if (!titled) p <- p + labs(title = NULL, subtitle = NULL)
       built <- ggplot_build(p)
-      stopifnot(nrow(built$layout$layout) == 1L, nrow(built$data[[2]]) == 8L,
-        nrow(built$data[[3]]) == 24L,
-        max(abs(built$data[[3]]$x - counts$argentina_pct)) < 1e-12,
-        max(abs(built$data[[2]]$x - ranges$minimum_pct)) < 1e-12,
-        max(abs(built$data[[2]]$xend - ranges$maximum_pct)) < 1e-12,
-        all(built$data[[2]]$y == built$data[[2]]$yend),
-        all(built$data[[3]]$colour == point_outline), length(unique(built$data[[3]]$shape)) == 2L,
-        all(built$data[[3]]$fill == unname(fill_colors[as.character(counts$argentine_variant)])),
-        all(built$data[[2]]$colour == line_color), all(built$data[[2]]$linetype == "solid"),
-        identical(built$layout$panel_params[[1]]$x.range, c(0, 65)),
-        length(built$layout$panel_params[[1]]$y$breaks) == 4L, is.null(p$labels$caption))
+      layout <- built$layout$layout
+      bars <- built$data[[2]]
+      stopifnot(nrow(layout) == 2L, all(layout$ROW == 1L),
+        identical(as.character(layout$group), groups), nrow(bars) == 24L,
+        all(bars$xmin == 0), all(table(bars$PANEL) == 12L),
+        all(abs(bars$xmax - counts$argentina_pct) < 1e-12),
+        all(bars$fill == unname(fills[as.character(counts$argentine_variant)])),
+        all(built$data[[4]]$label == paste0(counts$rounded_pct, "%")),
+        all(abs(built$data[[3]]$xmin - counts$lower) < 1e-12),
+        all(abs(built$data[[3]]$xmax - counts$upper) < 1e-12),
+        all(vapply(built$layout$panel_params, function(x) identical(x$x.range, c(0, 70)), logical(1))),
+        identical(built$layout$panel_params[[1]]$y.range, built$layout$panel_params[[2]]$y.range),
+        p$theme$legend.position == "none", is.null(p$labels$caption))
       p
     }
-
     make_plot
   })
 
@@ -526,7 +523,7 @@ run_editorial_outputs <- function(data = NULL, root = ".", overwrite = FALSE, ch
     editorial_control_signals_counts=control_counts)
   csv_files <- file.path(table_dir, paste0(names(csv_objects), ".csv"))
   manifest_path <- file.path(table_dir, "editorial_outputs_manifest.json")
-  if (check || (!overwrite && file.exists(manifest_path))) {
+  if (check || (!overwrite && !refresh_mitigation && file.exists(manifest_path))) {
     stopifnot(file.exists(manifest_path))
     m <- jsonlite::fromJSON(manifest_path, simplifyVector=FALSE)
     stopifnot(m$source_sha256 == sha(source_csv),
@@ -557,8 +554,29 @@ run_editorial_outputs <- function(data = NULL, root = ".", overwrite = FALSE, ch
       }
     }
   }
+  if (refresh_mitigation) {
+    stopifnot(file.exists(manifest_path))
+    prior <- jsonlite::fromJSON(manifest_path, simplifyVector=FALSE)
+    stopifnot(prior$source_sha256 == sha(source_csv),
+      prior$metadata_helper_sha256 == sha(metadata_helper))
+    for (f in names(prior$output_sha256))
+      stopifnot(sha(file.path(root,f)) == prior$output_sha256[[f]])
+    overwrite <- TRUE
+    save_family(mitigation_plot,"mitigation_signals",17,c(con_titulos=10.2,sin_titulos=9.3))
+    csv <- file.path(table_dir,"editorial_mitigation_counts.csv")
+    write.csv(mitigation_counts,csv,row.names=FALSE,fileEncoding="UTF-8")
+    owned <- c(owned,csv)
+    rel <- substring(owned,nchar(root)+2L)
+    for (i in seq_along(owned)) prior$output_sha256[[rel[i]]] <- sha(owned[i])
+    prior$script_sha256 <- sha(file.path(root,"code/R/05_editorial_outputs.R"))
+    prior$mitigation_visual <- list(kind="faceted horizontal bars",panels=2L,bars=24L,
+      shared_axis=c(0,70),interval="95% pointwise normal (Wald), binom::binom.confint(methods='asymptotic')")
+    jsonlite::write_json(prior,manifest_path,pretty=TRUE,auto_unbox=TRUE,digits=15)
+    message("MITIGATION_REFRESH_OK: six faceted-bar exports and their count/CI table; other outputs preserved.")
+    return(invisible(prior))
+  }
   save_family(environment_plot,"search_environments",16,c(con_titulos=13.6,sin_titulos=12.6))
-  save_family(mitigation_plot,"mitigation_signals",16,c(con_titulos=12.2,sin_titulos=11.2))
+  save_family(mitigation_plot,"mitigation_signals",17,c(con_titulos=10.2,sin_titulos=9.3))
   save_family(control_plot,"control_signals",14,c(con_titulos=9,sin_titulos=7.9))
   for (scale in c("ORDINAL5","BINARY2")) {
     suffix <- if(scale=="ORDINAL5") "five_options" else "binary"
@@ -635,6 +653,8 @@ run_editorial_outputs <- function(data = NULL, root = ".", overwrite = FALSE, ch
     ci=list(function_used="binom::binom.confint(conf.level=0.95,methods='asymptotic')",
       meaning="Pointwise normal (Wald), not clipped to 0–100; complementary bars share observations"),
     dotplot_lines="Minimum to maximum marginal percentage within signal/group, not confidence intervals",
+    mitigation_visual=list(kind="faceted horizontal bars",panels=2L,bars=24L,
+      shared_axis=c(0,70),interval="95% pointwise normal (Wald), binom::binom.confint(methods='asymptotic')"),
     output_sha256=as.list(setNames(vapply(owned,sha,character(1)),rel)),
     packages=as.list(setNames(vapply(packages,function(p)as.character(utils::packageVersion(p)),character(1)),packages)),
     network_used=FALSE)
@@ -645,6 +665,7 @@ run_editorial_outputs <- function(data = NULL, root = ".", overwrite = FALSE, ch
 
 if (sys.nframe()==0L) {
   cli <- commandArgs(trailingOnly=TRUE)
-  stopifnot(all(cli %in% c("--overwrite","--check")))
-  run_editorial_outputs(overwrite="--overwrite" %in% cli,check="--check" %in% cli)
+  stopifnot(all(cli %in% c("--overwrite","--check","--refresh-mitigation")))
+  run_editorial_outputs(overwrite="--overwrite" %in% cli,check="--check" %in% cli,
+    refresh_mitigation="--refresh-mitigation" %in% cli)
 }

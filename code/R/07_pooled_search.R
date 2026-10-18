@@ -1,14 +1,15 @@
 #!/usr/bin/env Rscript
 # Marginal percentages: assigned search availability, BINARY2 CONTROL.
 # Run from the repository root. Existing outputs are verified; --check never writes.
-packages <- c("ggplot2", "ggtext", "jsonlite", "digest", "ragg", "svglite")
+packages <- c("ggplot2", "binom", "jsonlite", "digest", "ragg", "svglite")
 missing <- packages[!vapply(packages, requireNamespace, logical(1), quietly = TRUE)]
 if (length(missing)) stop("Install the required R packages: ", paste(missing, collapse = ", "))
-suppressPackageStartupMessages({library(ggplot2); library(ggtext); library(jsonlite); library(digest)})
+suppressPackageStartupMessages({library(ggplot2); library(jsonlite); library(digest)})
 options(stringsAsFactors = FALSE, scipen = 999)
 args <- commandArgs(trailingOnly = TRUE)
-stopifnot(length(args) == 0L || identical(args, "--check"))
+stopifnot(length(args) == 0L || identical(args, "--check") || identical(args, "--overwrite"))
 check_only <- identical(args, "--check")
+overwrite <- identical(args, "--overwrite")
 script <- "code/R/07_pooled_search.R"
 stem <- "search_pooled"
 out_dir <- "output/figures"
@@ -65,159 +66,152 @@ stopifnot(nrow(counts) == 16L,
   all(counts$denominator == ifelse(counts$search_group == "NO_WEB",
     ifelse(counts$factor == "toponym_id", 450, 300),
     ifelse(counts$factor == "toponym_id", 1350, 900))))
-range_rows <- list()
-for (group in groups) for (f in names(definitions)) {
-  q <- counts[counts$search_group == group & counts$factor == f, ]
-  range_rows[[length(range_rows)+1L]] <- data.frame(search_group = group, factor = f,
-    minimum_pct = min(q$argentina_pct), maximum_pct = max(q$argentina_pct),
-    range_pp = diff(range(q$argentina_pct)))
-}
-ranges <- do.call(rbind, range_rows)
+groups <- c("NO_WEB", "WEB_AUTO")
 factors <- c("toponym_id", "origin_id", "language_level")
-signal_labels <- c("Nombre", "Origen declarado", "Idioma")
-centers <- setNames(c(7.5, 4.6, 1.7), factors)
-offsets <- setNames(c(.55, -.55), groups)
-counts$plot_y <- unname(centers[counts$factor] + offsets[counts$search_group])
-ranges$plot_y <- unname(centers[ranges$factor] + offsets[ranges$search_group])
-for (i in seq_len(nrow(ranges))) {
-  x <- counts$argentina_pct[counts$search_group == ranges$search_group[i] & counts$factor == ranges$factor[i]]
-  stopifnot(abs(min(x) - ranges$minimum_pct[i]) < 1e-10,
-            abs(max(x) - ranges$maximum_pct[i]) < 1e-10)
-}
-# Se agrupan sólo textos, nunca puntos ni porcentajes. Cada nivel sigue visible.
-label_rows <- list()
-for (loc in groups) for (f in factors) {
-  z <- counts[counts$search_group == loc & counts$factor == f, ]
-  z <- z[order(z$argentina_pct), ]
-  z$cluster <- cumsum(c(TRUE, diff(z$argentina_pct) >= 10))
-  for (cl in unique(z$cluster)) {
-    q <- z[z$cluster == cl, ]
-    label_rows[[length(label_rows) + 1L]] <- data.frame(search_group = loc, factor = f,
-      x = mean(range(q$argentina_pct)), y = q$plot_y[1] + .16,
-      label = paste0(q$label, " · <b>", q$rounded_pct, "%</b>", collapse = "<br>"),
-      n_points = nrow(q), levels = paste(q$level, collapse = "|"))
-  }
-}
-labels <- do.call(rbind, label_rows)
-stopifnot(sum(labels$n_points) == 16L)
+ci <- binom::binom.confint(counts$argentina_n, counts$denominator, conf.level = .95, methods = "asymptotic")
+stopifnot(nrow(ci)==nrow(counts), all(ci$method=="asymptotic"),
+  all(abs(100*ci$mean-counts$argentina_pct)<1e-12))
+counts$lower <- 100 * ci$lower
+counts$upper <- 100 * ci$upper
 counts$search_group <- factor(counts$search_group, levels = groups)
-ranges$search_group <- factor(ranges$search_group, levels = groups)
-fill_colors <- c("FALSE" = "#969DA3", "TRUE" = "#6DBBDE")
-point_outline <- "#606C76"
-line_color <- "#BFC5CA"
-shapes <- c(NO_WEB = 21, WEB_AUTO = 22)
-line_types <- c(NO_WEB = "solid", WEB_AUTO = "solid")
-legend_labels <- c("Sin búsqueda", "Con búsqueda")
-make_plot <- function(titled = TRUE) {
+headers <- list(); axis_rows <- list(); cursor <- 0
+for (f in factors) {
+  q <- counts[counts$factor == f & counts$search_group == "NO_WEB", ]
+  headers[[length(headers) + 1L]] <- data.frame(y = -cursor, text = q$signal[1])
+  cursor <- cursor + 1.05
+  for (i in seq_len(nrow(q))) {
+    counts$plot_y[counts$factor == f & counts$level == q$level[i]] <- -cursor
+    axis_rows[[length(axis_rows) + 1L]] <- data.frame(y = -cursor, label = q$label[i])
+    cursor <- cursor + 1.15
+  }
+  cursor <- cursor + .35
+}
+headers <- do.call(rbind, headers); axis_rows <- do.call(rbind, axis_rows)
+fills <- c("FALSE" = "#969DA3", "TRUE" = "#6DBBDE")
+make_plot <- function(titled) {
   p <- ggplot() +
-    geom_hline(yintercept = c(6.05, 3.15), colour = "#E8EAEC", linewidth = .4) +
-    geom_segment(data = ranges, aes(x = minimum_pct, xend = maximum_pct,
-      y = plot_y, yend = plot_y, linetype = search_group), colour = line_color, linewidth = 1.1, lineend = "round") +
-    geom_point(data = counts, aes(x = argentina_pct, y = plot_y, fill = argentine_variant, shape = search_group),
-      colour = point_outline, size = 3.8, stroke = .65) +
-    ggtext::geom_richtext(data = labels, aes(x = x, y = y, label = label),
-      colour = "black", fill = NA, label.color = NA, size = 5.1, vjust = 0, hjust = .5,
-      label.padding = grid::unit(rep(0, 4), "pt"), lineheight = 1.1, family = "sans") +
-    scale_fill_manual(values = fill_colors, guide = "none") +
-    scale_linetype_manual(values = line_types, breaks = groups, labels = legend_labels, name = NULL) +
-    scale_shape_manual(values = shapes, breaks = groups, labels = legend_labels, name = NULL) +
-    scale_x_continuous(limits = c(0, 80), breaks = seq(0, 80, 10),
+    geom_rect(data = headers, aes(xmin = 0, xmax = 70, ymin = y - .38, ymax = y + .4),
+      fill = "white", colour = NA) +
+    geom_rect(data = counts, aes(xmin = 0, xmax = argentina_pct,
+      ymin = plot_y - .31, ymax = plot_y + .31, fill = argentine_variant),
+      colour = "#606C76", linewidth = .35) +
+    geom_errorbar(data = counts, aes(y = plot_y, xmin = lower, xmax = upper),
+      orientation = "y", width = .26, linewidth = .65, colour = "#34434C") +
+    geom_text(data = counts, aes(x = upper + 1.4, y = plot_y,
+      label = paste0(rounded_pct, "%")), size = 5.1, hjust = 0,
+      fontface = "bold", family = "sans", colour = "black") +
+    geom_text(data = headers, aes(x = 0, y = y, label = text), hjust = 0,
+      fontface = "bold", family = "sans", size = 5.8, colour = "black") +
+    facet_wrap(vars(search_group), nrow = 1, scales = "fixed",
+      labeller = as_labeller(c(NO_WEB = "Sin búsqueda en internet", WEB_AUTO = "Con búsqueda en internet"))) +
+    scale_fill_manual(values = fills, guide = "none") +
+    scale_x_continuous(limits = c(0, 70), breaks = seq(0, 60, 20),
       labels = function(x) paste0(x, "%"), expand = expansion(mult = 0)) +
-    scale_y_continuous(limits = c(.5, 8.8), breaks = unname(centers), labels = signal_labels,
-      expand = expansion(mult = 0)) +
-    labs(title = "Elección de Argentina, con y sin búsqueda",
-      subtitle = "Elección forzada · Sin mitigación · 900 respuestas sin búsqueda y 2.700 con búsqueda\nCon búsqueda: EE. UU. (por defecto), Reino Unido y Argentina, agrupados",
-      x = "Respuestas que eligen Argentina", y = NULL, caption = NULL) +
-    guides(linetype = guide_legend(nrow = 1, byrow = TRUE),
-      shape = guide_legend(nrow = 1, byrow = TRUE, override.aes = list(fill = "#6DBBDE"))) +
+    scale_y_continuous(limits = c(min(counts$plot_y) - .75, .65),
+      breaks = axis_rows$y, labels = axis_rows$label, expand = expansion(mult = 0)) +
+    labs(x = "Respuestas que eligen Argentina", y = NULL,
+      title = if (titled) "Elección de Argentina, con y sin búsqueda en internet" else NULL,
+      subtitle = if (titled) paste("Elección forzada · Sin mitigación · 900 respuestas sin búsqueda en internet y 2.700 con búsqueda en internet",
+        "Con búsqueda en internet: EE. UU. (por defecto), Reino Unido y Argentina, agrupados · IC del 95%", sep = "\n") else NULL,
+      caption = NULL) +
     theme_minimal(base_size = 17, base_family = "sans") +
     theme(panel.grid.major.y = element_blank(), panel.grid.minor = element_blank(),
       panel.grid.major.x = element_line(colour = "#EBEEF0", linewidth = .35),
-      axis.text.x = element_text(size = 18, colour = "black"),
-      axis.text.y = element_text(size = 21, face = "bold", colour = "black", margin = margin(r = 18)),
-      axis.title.x = element_text(size = 19, colour = "black", margin = margin(t = 14)),
+      panel.spacing.x = grid::unit(42, "pt"),
+      axis.text.x = element_text(size = 17, colour = "black"),
+      axis.text.y = element_text(size = 17, colour = "black", margin = margin(r = 12)),
+      axis.title.x = element_text(size = 19, colour = "black", margin = margin(t = 15)),
       axis.line.x = element_line(colour = "#AFB8BF", linewidth = .4),
-      legend.position = "top", legend.justification = "left",
-      legend.text = element_text(size = 19, colour = "black", lineheight = 1.1),
-      legend.key.width = grid::unit(31, "pt"), legend.spacing.x = grid::unit(18, "pt"),
-      legend.margin = margin(t = 6, b = 16),
+      strip.text = element_text(size = 21, face = "bold", colour = "black", margin = margin(b = 15)),
+      strip.background = element_blank(), legend.position = "none",
       plot.title = element_text(size = 27, face = "bold", colour = "black", margin = margin(b = 10)),
-      plot.subtitle = element_text(size = 16, colour = "black", lineheight = 1.2, margin = margin(b = 6)),
-      plot.title.position = "plot", plot.margin = margin(22, 32, 20, 20),
+      plot.subtitle = element_text(size = 17, colour = "black", margin = margin(b = 20)),
+      plot.title.position = "plot", plot.margin = margin(22, 30, 20, 20),
       plot.background = element_rect(fill = "white", colour = NA))
-  if (!titled) p <- p + labs(title = NULL, subtitle = NULL)
   built <- ggplot_build(p)
-  stopifnot(nrow(built$layout$layout) == 1L, nrow(built$data[[2]]) == 6L,
-    nrow(built$data[[3]]) == 16L,
-    max(abs(built$data[[3]]$x - counts$argentina_pct)) < 1e-12,
-    max(abs(built$data[[2]]$x - ranges$minimum_pct)) < 1e-12,
-    max(abs(built$data[[2]]$xend - ranges$maximum_pct)) < 1e-12,
-    all(built$data[[2]]$y == built$data[[2]]$yend),
-    all(built$data[[3]]$colour == point_outline), length(unique(built$data[[3]]$shape)) == 2L,
-    all(built$data[[3]]$fill == unname(fill_colors[as.character(counts$argentine_variant)])),
-    all(built$data[[2]]$colour == line_color), all(built$data[[2]]$linetype == "solid"),
-    identical(built$layout$panel_params[[1]]$x.range, c(0, 80)),
-    length(built$layout$panel_params[[1]]$y$breaks) == 3L, is.null(p$labels$caption))
+  layout <- built$layout$layout
+  bars <- built$data[[2]]
+  stopifnot(nrow(layout) == 2L, all(layout$ROW == 1L),
+    identical(as.character(layout$search_group), groups), nrow(bars) == 16L,
+    all(bars$xmin == 0), all(table(bars$PANEL) == 8L),
+    all(abs(bars$xmax - counts$argentina_pct) < 1e-12),
+    all(bars$fill == unname(fills[as.character(counts$argentine_variant)])),
+    all(built$data[[4]]$label == paste0(counts$rounded_pct, "%")),
+    all(abs(built$data[[3]]$xmin - counts$lower) < 1e-12),
+    all(abs(built$data[[3]]$xmax - counts$upper) < 1e-12),
+    all(vapply(built$layout$panel_params, function(x) identical(x$x.range, c(0, 70)), logical(1))),
+    identical(built$layout$panel_params[[1]]$y.range, built$layout$panel_params[[2]]$y.range),
+    p$theme$legend.position == "none", is.null(p$labels$caption))
   p
 }
 
 variants <- c("con_titulos", "sin_titulos")
 formats <- c("png", "pdf", "svg")
 files <- unlist(lapply(variants, function(v) file.path(out_dir, v, formats, paste0(stem, ".", formats))))
-csv_files <- setNames(file.path(table_dir, c("editorial_search_pooled_counts.csv",
-  "editorial_search_pooled_ranges.csv", "editorial_search_pooled_labels.csv")),
-  c("counts", "ranges", "labels"))
+csv <- file.path(table_dir, "editorial_search_pooled_counts.csv")
 manifest_path <- file.path(table_dir, "search_pooled_manifest.json")
-check_only <- check_only || file.exists(manifest_path)
+check_only <- check_only || (!overwrite && file.exists(manifest_path))
 if (check_only) stopifnot(file.exists(manifest_path))
 if (!check_only) {
-  stopifnot(!any(file.exists(c(files, csv_files, manifest_path))))
-  for (folder in unique(dirname(c(files, csv_files, manifest_path))))
-    dir.create(folder, recursive = TRUE, showWarnings = FALSE)
+  if (overwrite && file.exists(manifest_path)) {
+    prior <- fromJSON(manifest_path, simplifyVector=FALSE)
+    for (path in names(prior$input_sha256)) stopifnot(sha(path)==prior$input_sha256[[path]])
+    for (path in names(prior$output_sha256)) {
+      # Obsolete dotplot-only label/range tables are no longer produced.
+      if (path %in% c("output/tables/editorial_search_pooled_labels.csv",
+                      "output/tables/editorial_search_pooled_ranges.csv")) next
+      stopifnot(sha(path)==prior$output_sha256[[path]])
+    }
+  }
+  if (!overwrite) stopifnot(!any(file.exists(c(files,csv,manifest_path))))
+  for (folder in unique(dirname(c(files,csv,manifest_path))))
+    dir.create(folder,recursive=TRUE,showWarnings=FALSE)
 }
 for (variant in variants) {
-  titled <- variant == "con_titulos"
+  titled <- variant=="con_titulos"
   p <- make_plot(titled)
   if (!check_only) {
-    dest <- function(format) file.path(out_dir, variant, format, paste0(stem, ".", format))
-    height <- if (titled) 9.6 else 8.6
-    ggsave(dest("png"), p, width = 16, height = height, units = "in", dpi = 300, device = ragg::agg_png, bg = "white")
-    ggsave(dest("pdf"), p, width = 16, height = height, units = "in", device = grDevices::pdf, useDingbats = FALSE, bg = "white")
-    ggsave(dest("svg"), p, width = 16, height = height, units = "in", device = svglite::svglite, bg = "white")
+    dest <- function(format) file.path(out_dir,variant,format,paste0(stem,".",format))
+    height <- if(titled) 8.4 else 7.2
+    ggsave(dest("png"),p,width=17,height=height,units="in",dpi=300,device=ragg::agg_png,bg="white")
+    ggsave(dest("pdf"),p,width=17,height=height,units="in",device=grDevices::pdf,useDingbats=FALSE,bg="white")
+    ggsave(dest("svg"),p,width=17,height=height,units="in",device=svglite::svglite,bg="white")
   }
 }
 if (check_only) {
-  m <- fromJSON(manifest_path, simplifyVector = FALSE)
-  stopifnot(m$script_sha256 == sha(script))
-  for (path in names(m$input_sha256)) stopifnot(sha(path) == m$input_sha256[[path]])
-  for (path in names(m$output_sha256)) stopifnot(sha(path) == m$output_sha256[[path]])
-  for (name in names(csv_files)) {
-    expected <- as.data.frame(lapply(get(name), function(x) if (is.factor(x)) as.character(x) else x))
-    stopifnot(isTRUE(all.equal(read.csv(csv_files[[name]]), expected, check.attributes = FALSE, tolerance = 1e-12)))
-  }
-  cat("POOLED_SEARCH_CHECK_OK: 900 sin búsqueda, 2700 con búsqueda; 16 porcentajes y seis líneas.\n")
+  m <- fromJSON(manifest_path,simplifyVector=FALSE)
+  stopifnot(m$script_sha256==sha(script))
+  for(path in names(m$input_sha256)) stopifnot(sha(path)==m$input_sha256[[path]])
+  for(path in names(m$output_sha256)) stopifnot(sha(path)==m$output_sha256[[path]])
+  expected <- counts
+  expected$search_group <- as.character(expected$search_group)
+  stopifnot(isTRUE(all.equal(read.csv(csv),expected,check.attributes=FALSE,tolerance=1e-12)))
+  cat("POOLED_SEARCH_CHECK_OK: 900 sin búsqueda y 2700 con búsqueda en internet; 16 barras e IC95 de binom.\n")
 } else {
-  for (name in names(csv_files)) write.csv(get(name), csv_files[[name]], row.names = FALSE, fileEncoding = "UTF-8")
-  m <- list(status = "VERIFIED_OFFLINE_POOLED_SEARCH", script = script, script_sha256 = sha(script),
-    source = source_csv, source_sha256 = expected_source_hash,
-    input_sha256 = as.list(setNames(vapply(input_files, sha, character(1)), input_files)),
-    output_sha256 = as.list(setNames(vapply(c(files, csv_files), sha, character(1)), c(files, csv_files))),
-    filters = list(scale = "BINARY2", arm = "CONTROL"), selected_cases = 3600,
-    groups = list(NO_WEB = list(n = 900, locations = "HIST_NO_WEB"),
-      WEB_AUTO = list(n = 2700, locations = c("HIST_DEFAULT", "GB", "AR"), n_per_location = 900)),
-    denominators = list(NO_WEB = list(name = 450, origin_or_language = 300),
-      WEB_AUTO = list(name = 1350, origin_or_language = 900)),
-    aggregation = "ARG count divided by all cases in each group and signal level, pooling all other conditions. Three web locations have equal sample size.",
-    search_group_definition = "Assigned tool availability (search_regime), not a filter on realized search_used.",
-    comparison = "Descriptive pooling of historical and geographic cohorts; not a pure causal effect of enabling search.",
-    visual = list(points = 16, lines = 6, shared_axis = c(0, 80), fill_colors = as.list(fill_colors),
-      shapes = as.list(shapes), width_inches = 16, heights_inches = list(con_titulos = 9.6, sin_titulos = 8.6),
-      line_meaning = "Minimum to maximum marginal percentage, not confidence intervals.",
-      color_meaning = "Celeste para Malvinas, Buenos Aires y voseo; gris para las demás variantes.",
-      labels = labels, footnotes = FALSE),
-    packages = as.list(setNames(vapply(packages, function(p) as.character(packageVersion(p)), character(1)), packages)),
-    network_used = FALSE)
-  writeLines(toJSON(m, auto_unbox = TRUE, pretty = TRUE, digits = 15), manifest_path)
-  cat(paste(files, collapse = "\n"), "\n")
+  write.csv(counts,csv,row.names=FALSE,fileEncoding="UTF-8")
+  outputs <- c(files,csv)
+  m <- list(status="VERIFIED_OFFLINE_POOLED_SEARCH",script=script,script_sha256=sha(script),
+    source=source_csv,source_sha256=expected_source_hash,
+    input_sha256=as.list(setNames(vapply(input_files,sha,character(1)),input_files)),
+    output_sha256=as.list(setNames(vapply(outputs,sha,character(1)),outputs)),
+    filters=list(scale="BINARY2",arm="CONTROL"),selected_cases=3600,
+    groups=list(NO_WEB=list(n=900,locations="HIST_NO_WEB"),
+      WEB_AUTO=list(n=2700,locations=c("HIST_DEFAULT","GB","AR"),n_per_location=900)),
+    denominators=list(NO_WEB=list(name=450,origin_or_language=300),
+      WEB_AUTO=list(name=1350,origin_or_language=900)),
+    aggregation="ARG count divided by all cases in each group and signal level, pooling all other conditions. Three web locations have equal sample size.",
+    search_group_definition="Assigned tool availability (search_regime), not a filter on realized search_used.",
+    comparison="Descriptive pooling of historical and geographic cohorts; not a pure causal effect of enabling search.",
+    uncertainty=list(package="binom",function_name="binom::binom.confint",methods="asymptotic",
+      confidence_level=.95,interpretation="Pointwise Wald intervals, not clipped; no simultaneous or block-cluster adjustment."),
+    visual=list(kind="faceted horizontal bars",panels=2,bars=16,shared_axis=c(0,70),
+      fill_colors=as.list(fills),width_inches=17,
+      heights_inches=list(con_titulos=8.4,sin_titulos=7.2),
+      color_meaning="Celeste para Malvinas, Buenos Aires y voseo; gris para las demás variantes.",
+      footnotes=FALSE),
+    packages=as.list(setNames(vapply(packages,function(p)as.character(packageVersion(p)),character(1)),packages)),
+    network_used=FALSE)
+  writeLines(toJSON(m,auto_unbox=TRUE,pretty=TRUE,digits=15),manifest_path)
+  cat(paste(files,collapse="\n"),"\n")
 }
-print(counts[, c("search_group", "factor", "level", "denominator", "argentina_n", "argentina_pct")], row.names = FALSE)
+print(counts[,c("search_group","factor","level","denominator","argentina_n","argentina_pct","lower","upper")],row.names=FALSE)

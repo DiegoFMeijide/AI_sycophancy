@@ -1,25 +1,25 @@
-"arm","factor","signal","level","label","denominator","argentina_n","argentina_pct","argentine_variant","rounded_pct"
-"CONTROL","toponym_id","Nombre","FALKLANDS","Falkland",1800,407,22.6111111111111,FALSE,23
-"CONTROL","toponym_id","Nombre","MALVINAS","Malvinas",1800,1014,56.3333333333333,TRUE,56
-"CONTROL","origin_id","Origen declarado","LONDON","Londres",1200,321,26.75,FALSE,27
-"CONTROL","origin_id","Origen declarado","NONE","No lo dice",1200,434,36.1666666666667,FALSE,36
-"CONTROL","origin_id","Origen declarado","BUENOS_AIRES","Buenos Aires",1200,666,55.5,TRUE,56
-"CONTROL","location","Ubicación del buscador en la API","GB","Reino Unido",900,291,32.3333333333333,FALSE,32
-"CONTROL","location","Ubicación del buscador en la API","HIST_NO_WEB","Sin búsqueda",900,304,33.7777777777778,FALSE,34
-"CONTROL","location","Ubicación del buscador en la API","HIST_DEFAULT","EE. UU. (sin ubicación)",900,315,35,FALSE,35
-"CONTROL","location","Ubicación del buscador en la API","AR","Argentina",900,511,56.7777777777778,TRUE,57
-"CONTROL","language_level","Idioma","EN","Inglés",1200,303,25.25,FALSE,25
-"CONTROL","language_level","Idioma","ES_NEUTRAL","Español neutro",1200,548,45.6666666666667,FALSE,46
-"CONTROL","language_level","Idioma","ES_AR","Español con voseo",1200,570,47.5,TRUE,48
-"MITIGATION","toponym_id","Nombre","FALKLANDS","Falkland",1800,292,16.2222222222222,FALSE,16
-"MITIGATION","toponym_id","Nombre","MALVINAS","Malvinas",1800,816,45.3333333333333,TRUE,45
-"MITIGATION","origin_id","Origen declarado","LONDON","Londres",1200,251,20.9166666666667,FALSE,21
-"MITIGATION","origin_id","Origen declarado","NONE","No lo dice",1200,333,27.75,FALSE,28
-"MITIGATION","origin_id","Origen declarado","BUENOS_AIRES","Buenos Aires",1200,524,43.6666666666667,TRUE,44
-"MITIGATION","location","Ubicación del buscador en la API","GB","Reino Unido",900,182,20.2222222222222,FALSE,20
-"MITIGATION","location","Ubicación del buscador en la API","HIST_NO_WEB","Sin búsqueda",900,282,31.3333333333333,FALSE,31
-"MITIGATION","location","Ubicación del buscador en la API","HIST_DEFAULT","EE. UU. (sin ubicación)",900,221,24.5555555555556,FALSE,25
-"MITIGATION","location","Ubicación del buscador en la API","AR","Argentina",900,423,47,TRUE,47
-"MITIGATION","language_level","Idioma","EN","Inglés",1200,241,20.0833333333333,FALSE,20
-"MITIGATION","language_level","Idioma","ES_NEUTRAL","Español neutro",1200,398,33.1666666666667,FALSE,33
-"MITIGATION","language_level","Idioma","ES_AR","Español con voseo",1200,469,39.0833333333333,TRUE,39
+"arm","factor","signal","level","label","denominator","argentina_n","argentina_pct","argentine_variant","rounded_pct","lower","upper"
+"CONTROL","toponym_id","Nombre","FALKLANDS","Falkland",1800,407,22.6111111111111,FALSE,23,20.6786440674292,24.543578154793
+"CONTROL","toponym_id","Nombre","MALVINAS","Malvinas",1800,1014,56.3333333333333,TRUE,56,54.0420986018997,58.6245680647669
+"CONTROL","origin_id","Origen declarado","LONDON","Londres",1200,321,26.75,FALSE,27,24.2454876609118,29.2545123390882
+"CONTROL","origin_id","Origen declarado","NONE","No lo dice",1200,434,36.1666666666667,FALSE,36,33.4481282689978,38.8852050643355
+"CONTROL","origin_id","Origen declarado","BUENOS_AIRES","Buenos Aires",1200,666,55.5,TRUE,56,52.6882029882402,58.3117970117598
+"CONTROL","location","Ubicación del buscador en la API","GB","Reino Unido",900,291,32.3333333333333,FALSE,32,29.2774310168824,35.3892356497842
+"CONTROL","location","Ubicación del buscador en la API","HIST_NO_WEB","Sin búsqueda en internet",900,304,33.7777777777778,FALSE,34,30.6878790287238,36.8676765268317
+"CONTROL","location","Ubicación del buscador en la API","HIST_DEFAULT","EE. UU. (sin ubicación)",900,315,35,FALSE,35,31.8838558696365,38.1161441303635
+"CONTROL","location","Ubicación del buscador en la API","AR","Argentina",900,511,56.7777777777778,TRUE,57,53.5413227429749,60.0142328125807
+"CONTROL","language_level","Idioma","EN","Inglés",1200,303,25.25,FALSE,25,22.7919327658904,27.7080672341096
+"CONTROL","language_level","Idioma","ES_NEUTRAL","Español neutro",1200,548,45.6666666666667,FALSE,46,42.8483466896151,48.4849866437183
+"CONTROL","language_level","Idioma","ES_AR","Español con voseo",1200,570,47.5,TRUE,48,44.6745740831239,50.3254259168761
+"MITIGATION","toponym_id","Nombre","FALKLANDS","Falkland",1800,292,16.2222222222222,FALSE,16,14.5191564140706,17.9252880303738
+"MITIGATION","toponym_id","Nombre","MALVINAS","Malvinas",1800,816,45.3333333333333,TRUE,45,43.0335762670331,47.6330903996335
+"MITIGATION","origin_id","Origen declarado","LONDON","Londres",1200,251,20.9166666666667,FALSE,21,18.6155099908897,23.2178233424436
+"MITIGATION","origin_id","Origen declarado","NONE","No lo dice",1200,333,27.75,FALSE,28,25.2165759592475,30.2834240407525
+"MITIGATION","origin_id","Origen declarado","BUENOS_AIRES","Buenos Aires",1200,524,43.6666666666667,TRUE,44,40.8604886801891,46.4728446531443
+"MITIGATION","location","Ubicación del buscador en la API","GB","Reino Unido",900,182,20.2222222222222,FALSE,20,17.5981109732291,22.8463334712153
+"MITIGATION","location","Ubicación del buscador en la API","HIST_NO_WEB","Sin búsqueda en internet",900,282,31.3333333333333,FALSE,31,28.3029112748841,34.3637553917826
+"MITIGATION","location","Ubicación del buscador en la API","HIST_DEFAULT","EE. UU. (sin ubicación)",900,221,24.5555555555556,FALSE,25,21.7435553321974,27.3675557789138
+"MITIGATION","location","Ubicación del buscador en la API","AR","Argentina",900,423,47,TRUE,47,43.7392785525032,50.2607214474968
+"MITIGATION","language_level","Idioma","EN","Inglés",1200,241,20.0833333333333,FALSE,20,17.8166333218598,22.3500333448068
+"MITIGATION","language_level","Idioma","ES_NEUTRAL","Español neutro",1200,398,33.1666666666667,FALSE,33,30.5028462566766,35.8304870766568
+"MITIGATION","language_level","Idioma","ES_AR","Español con voseo",1200,469,39.0833333333333,TRUE,39,36.3226198790281,41.8440467876386

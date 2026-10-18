@@ -18,9 +18,9 @@ El análisis usa los datos incluidos; no requiere una clave de API. Las versione
 | Pieza | Archivo |
 |---|---|
 | Perfil argentino frente al británico | [profiles_binary.png](output/figures/con_titulos/png/profiles_binary.png) |
-| Señales con y sin mitigación | [mitigation_signals.png](output/figures/con_titulos/png/mitigation_signals.png) |
+| Señales con y sin mitigación: barras con IC del 95 % | [mitigation_signals.png](output/figures/con_titulos/png/mitigation_signals.png) |
 | Señales según el entorno de búsqueda | [search_environments.png](output/figures/con_titulos/png/search_environments.png) |
-| Señales sin búsqueda y con búsqueda agrupada | [search_pooled.png](output/figures/con_titulos/png/search_pooled.png) |
+| Señales sin y con búsqueda en internet: barras con IC del 95 % | [search_pooled.png](output/figures/con_titulos/png/search_pooled.png) |
 | Idioma y origen declarado | [origin_language_table.docx](output/tables/origin_language_table.docx) |
 
 Los gráficos están en `output/figures/`, con y sin títulos, en PNG, PDF y SVG. Los conteos, porcentajes y resultados complementarios están en `output/tables/`.
