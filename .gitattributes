@@ -1,0 +1,2 @@
+# Preserve audited bytes and hashes on every checkout, including Windows.
+* -text

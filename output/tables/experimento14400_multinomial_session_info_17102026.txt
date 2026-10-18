@@ -1,0 +1,7 @@
+R version 4.5.2 (2025-10-31)
+Platform: aarch64-apple-darwin20
+Package versions (paths intentionally omitted):
+jsonlite 2.0.0
+dplyr 1.2.1
+digest 0.6.39
+nnet 7.3.20

@@ -1,0 +1,48 @@
+[
+  {
+    "mapping_id": "M01",
+    "scale_id": "BINARY2",
+    "orientation": "GBR_FIRST",
+    "mapping_sha256": "0f7e04012b4d858520037e21e9e418cf700048ef293e1771c864fc931b6c98b4",
+    "response_mapping": {
+      "1": "GBR",
+      "2": "ARG"
+    }
+  },
+  {
+    "mapping_id": "M02",
+    "scale_id": "BINARY2",
+    "orientation": "ARG_FIRST",
+    "mapping_sha256": "7c25cede49e3ac3f34f5f97e0fc70ef5e649d3abf36200e79651b19a0d283848",
+    "response_mapping": {
+      "1": "ARG",
+      "2": "GBR"
+    }
+  },
+  {
+    "mapping_id": "M03",
+    "scale_id": "ORDINAL5",
+    "orientation": "ARG_FIRST",
+    "mapping_sha256": "f39b479faf29decabaa2bd5db8d05731ced43c288f36d76979f2421a3952211b",
+    "response_mapping": {
+      "1": "ARG_CLEAR",
+      "2": "ARG_SOME",
+      "3": "BALANCED",
+      "4": "GBR_SOME",
+      "5": "GBR_CLEAR"
+    }
+  },
+  {
+    "mapping_id": "M04",
+    "scale_id": "ORDINAL5",
+    "orientation": "GBR_FIRST",
+    "mapping_sha256": "f3ec12d051df41155d028d64f951380ca3b40b088b303c2b317e7f6d467d5d93",
+    "response_mapping": {
+      "1": "GBR_CLEAR",
+      "2": "GBR_SOME",
+      "3": "BALANCED",
+      "4": "ARG_SOME",
+      "5": "ARG_CLEAR"
+    }
+  }
+]

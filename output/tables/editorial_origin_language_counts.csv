@@ -1,0 +1,10 @@
+"origin_id","origin_label","language_level","language_label","denominator","argentina_n","argentina_pct"
+"LONDON","Londres","EN","Inglés",100,24,24
+"LONDON","Londres","ES_NEUTRAL","Español neutro",100,13,13
+"LONDON","Londres","ES_AR","Español con voseo",100,22,22
+"NONE","No lo dice","EN","Inglés",100,13,13
+"NONE","No lo dice","ES_NEUTRAL","Español neutro",100,31,31
+"NONE","No lo dice","ES_AR","Español con voseo",100,33,33
+"BUENOS_AIRES","Buenos Aires","EN","Inglés",100,34,34
+"BUENOS_AIRES","Buenos Aires","ES_NEUTRAL","Español neutro",100,67,67
+"BUENOS_AIRES","Buenos Aires","ES_AR","Español con voseo",100,67,67

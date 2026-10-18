@@ -1,0 +1,14 @@
+.DS_Store
+.Rhistory
+.RData
+.Rproj.user/
+.env
+.env.*
+*.pem
+*.key
+__pycache__/
+.venv/
+renv/library/
+renv/staging/
+tmp/
+output/sessionInfo.txt

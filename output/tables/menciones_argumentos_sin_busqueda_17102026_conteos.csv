@@ -1,0 +1,49 @@
+"scale_id","toponym_id","code","label","mentions","n","percentage"
+"ORDINAL5","FALKLANDS","ES_TITLE","Herencia de los derechos españoles",376,450,83.5555555555556
+"ORDINAL5","FALKLANDS","AR_PRE1833","Presencia argentina previa a 1833",22,450,4.88888888888889
+"ORDINAL5","FALKLANDS","DISPLACEMENT_1833","Toma británica y desplazamiento de 1833",350,450,77.7777777777778
+"ORDINAL5","FALKLANDS","UK_ADMIN","Administración británica prolongada",450,450,100
+"ORDINAL5","FALKLANDS","ISLANDERS_WISHES","Voluntad de los isleños y autodeterminación",447,450,99.3333333333333
+"ORDINAL5","FALKLANDS","AR_INTEGRITY","Integridad territorial argentina",64,450,14.2222222222222
+"ORDINAL5","FALKLANDS","AR_PROXIMITY","Proximidad geográfica con Argentina",55,450,12.2222222222222
+"ORDINAL5","FALKLANDS","UN_NEGOTIATION","ONU y negociación de la soberanía",249,450,55.3333333333333
+"ORDINAL5","FALKLANDS","UK_EARLY","Presencia o reclamo británico anterior a 1833",6,450,1.33333333333333
+"ORDINAL5","FALKLANDS","AR_PROTEST_CONTINUITY","Continuidad de la protesta o del reclamo argentino",5,450,1.11111111111111
+"ORDINAL5","FALKLANDS","NO_FINAL_RULING","Falta de fallo o decisión internacional definitiva",166,450,36.8888888888889
+"ORDINAL5","FALKLANDS","SELFDET_LIMITS","Límites de la autodeterminación o voluntad isleña",149,450,33.1111111111111
+"ORDINAL5","MALVINAS","ES_TITLE","Herencia de los derechos españoles",398,450,88.4444444444444
+"ORDINAL5","MALVINAS","AR_PRE1833","Presencia argentina previa a 1833",37,450,8.22222222222222
+"ORDINAL5","MALVINAS","DISPLACEMENT_1833","Toma británica y desplazamiento de 1833",400,450,88.8888888888889
+"ORDINAL5","MALVINAS","UK_ADMIN","Administración británica prolongada",450,450,100
+"ORDINAL5","MALVINAS","ISLANDERS_WISHES","Voluntad de los isleños y autodeterminación",446,450,99.1111111111111
+"ORDINAL5","MALVINAS","AR_INTEGRITY","Integridad territorial argentina",32,450,7.11111111111111
+"ORDINAL5","MALVINAS","AR_PROXIMITY","Proximidad geográfica con Argentina",30,450,6.66666666666667
+"ORDINAL5","MALVINAS","UN_NEGOTIATION","ONU y negociación de la soberanía",313,450,69.5555555555556
+"ORDINAL5","MALVINAS","UK_EARLY","Presencia o reclamo británico anterior a 1833",29,450,6.44444444444444
+"ORDINAL5","MALVINAS","AR_PROTEST_CONTINUITY","Continuidad de la protesta o del reclamo argentino",8,450,1.77777777777778
+"ORDINAL5","MALVINAS","NO_FINAL_RULING","Falta de fallo o decisión internacional definitiva",221,450,49.1111111111111
+"ORDINAL5","MALVINAS","SELFDET_LIMITS","Límites de la autodeterminación o voluntad isleña",106,450,23.5555555555556
+"BINARY2","FALKLANDS","ES_TITLE","Herencia de los derechos españoles",328,450,72.8888888888889
+"BINARY2","FALKLANDS","AR_PRE1833","Presencia argentina previa a 1833",8,450,1.77777777777778
+"BINARY2","FALKLANDS","DISPLACEMENT_1833","Toma británica y desplazamiento de 1833",282,450,62.6666666666667
+"BINARY2","FALKLANDS","UK_ADMIN","Administración británica prolongada",445,450,98.8888888888889
+"BINARY2","FALKLANDS","ISLANDERS_WISHES","Voluntad de los isleños y autodeterminación",449,450,99.7777777777778
+"BINARY2","FALKLANDS","AR_INTEGRITY","Integridad territorial argentina",68,450,15.1111111111111
+"BINARY2","FALKLANDS","AR_PROXIMITY","Proximidad geográfica con Argentina",166,450,36.8888888888889
+"BINARY2","FALKLANDS","UN_NEGOTIATION","ONU y negociación de la soberanía",173,450,38.4444444444444
+"BINARY2","FALKLANDS","UK_EARLY","Presencia o reclamo británico anterior a 1833",3,450,0.666666666666667
+"BINARY2","FALKLANDS","AR_PROTEST_CONTINUITY","Continuidad de la protesta o del reclamo argentino",4,450,0.888888888888889
+"BINARY2","FALKLANDS","NO_FINAL_RULING","Falta de fallo o decisión internacional definitiva",56,450,12.4444444444444
+"BINARY2","FALKLANDS","SELFDET_LIMITS","Límites de la autodeterminación o voluntad isleña",76,450,16.8888888888889
+"BINARY2","MALVINAS","ES_TITLE","Herencia de los derechos españoles",384,450,85.3333333333333
+"BINARY2","MALVINAS","AR_PRE1833","Presencia argentina previa a 1833",36,450,8
+"BINARY2","MALVINAS","DISPLACEMENT_1833","Toma británica y desplazamiento de 1833",358,450,79.5555555555556
+"BINARY2","MALVINAS","UK_ADMIN","Administración británica prolongada",446,450,99.1111111111111
+"BINARY2","MALVINAS","ISLANDERS_WISHES","Voluntad de los isleños y autodeterminación",449,450,99.7777777777778
+"BINARY2","MALVINAS","AR_INTEGRITY","Integridad territorial argentina",40,450,8.88888888888889
+"BINARY2","MALVINAS","AR_PROXIMITY","Proximidad geográfica con Argentina",46,450,10.2222222222222
+"BINARY2","MALVINAS","UN_NEGOTIATION","ONU y negociación de la soberanía",261,450,58
+"BINARY2","MALVINAS","UK_EARLY","Presencia o reclamo británico anterior a 1833",9,450,2
+"BINARY2","MALVINAS","AR_PROTEST_CONTINUITY","Continuidad de la protesta o del reclamo argentino",7,450,1.55555555555556
+"BINARY2","MALVINAS","NO_FINAL_RULING","Falta de fallo o decisión internacional definitiva",77,450,17.1111111111111
+"BINARY2","MALVINAS","SELFDET_LIMITS","Límites de la autodeterminación o voluntad isleña",211,450,46.8888888888889

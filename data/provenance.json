@@ -1,0 +1,65 @@
+{
+  "status": "ALLOWLISTED_OFFICIAL_DATA_VERIFIED",
+  "created_date": "2026-10-18",
+  "rows": 14400,
+  "conditions": 288,
+  "rows_per_condition": 50,
+  "scales": 2,
+  "rows_per_scale": 7200,
+  "pilot_rows": 0,
+  "official_attempts": 14426,
+  "official_failed_attempts": 26,
+  "recovered_cases": 24,
+  "unique_prompts": 144,
+  "request_templates": 576,
+  "response_mappings": 4,
+  "source_files": {
+    "canonical": {
+      "name": "geografia_comparacion_oficial_17102026.csv",
+      "sha256": "65794c09c1ac4a037956bc9110dbcec601dd46f77ffc91bcdc09cafec2297e7d"
+    },
+    "all_attempts_export": {
+      "name": "todas_solicitudes_api_preguntas_decisiones_explicaciones_17102026.csv",
+      "sha256": "6c13fec04fbe867e5c73842808d5d5a3aa6c589bcc6df01da82fed2f2d3e1256",
+      "selected_filter": "incluida_analisis_principal == Sí; all pilot rows excluded"
+    }
+  },
+  "selected_raw_files_and_reservations_sha256_verified": 14400,
+  "web_metadata": {
+    "web_responses": 10800,
+    "queries": 90133,
+    "source_records": 603551,
+    "citation_records": 11100,
+    "source_urls_withheld": 381,
+    "citation_urls_withheld": 0
+  },
+  "output_sha256": {
+    "analysis_14400.csv": "c7d0078242bff63a44872a5c628700b2ea5fd7e82d3993e5a31d12acf775088a",
+    "prompts_144.csv": "f8f8b4facc07ad7d9e210ccef4b82677777393e852e58dcba8deae3f7e51a016",
+    "request_templates_576.json": "947851af7b4fc0237b477e15a8e873a966a076e9b9dab5f6e6f33e21795523f2",
+    "response_mappings.json": "1d1cf22827fec5414c29ef39d24e43ef8fe553ca82404c80d382731b00f27bf0",
+    "request_assignment_14400.csv": "85342b4da1e8b7c6f3a679854088668c6a5b8c94012acd617ddbeb382776d77c",
+    "failed_attempts_26.csv": "f84becbdbe040be42011b5535e0fd57d7a3b3009ac71ad05c6b607c491b7ff33",
+    "web_metadata_10800.jsonl.gz": "c21d8eae44ba80936c4563b2e1fbb183038729f6a61300f2e27c766bf4806d3b"
+  },
+  "omitted": [
+    "Provider response IDs and request IDs",
+    "Organization/project/account identifiers",
+    "Authorization and billing wrappers",
+    "Local paths and raw/reservation file names",
+    "Raw full response objects and reasoning envelopes",
+    "Pilot records",
+    "Web page bodies, snippets and captures"
+  ],
+  "preserved": [
+    "Literal user prompts and explanation e",
+    "Semantic request values as sent; JSON whitespace may differ",
+    "Choice code r and its actual block mapping",
+    "Treatments, order, block pairing, chronology and observed search metadata",
+    "Technical acceptance flags, recovery flags and 26 failed-attempt metadata records"
+  ],
+  "publication_note": "Web URLs and citation titles are metadata, not a license to the underlying third-party material; response explanations remain model outputs, not verified facts.",
+  "no_network": true,
+  "no_credentials_read": true,
+  "originals_unchanged": true
+}

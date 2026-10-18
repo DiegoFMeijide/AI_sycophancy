@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "Si utiliza este ejercicio, cite los datos y el código de replicación."
+title: "Señales del usuario y respuestas de un LLM sobre Malvinas y Falkland"
+authors:
+  - family-names: "Fernández Meijide"
+    given-names: "Diego"
+version: "2026-10-18"
+date-released: "2026-10-18"
+type: dataset
+abstract: "Paquete de replicación offline en R de 14.400 respuestas oficiales, con prompts, explicaciones, tablas y figuras. Excluye pilotos y credenciales."
+repository-code: "https://github.com/DiegoFMeijide/confirmation_bias_LLMs"
