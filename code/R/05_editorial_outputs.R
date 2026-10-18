@@ -26,7 +26,7 @@ run_editorial_outputs <- function(data = NULL, root = ".", overwrite = FALSE, ch
     location = c(GB = "Reino Unido", HIST_NO_WEB = "Sin búsqueda", HIST_DEFAULT = "EE. UU. (sin ubicación)", AR = "Argentina"),
     language_level = c(EN = "Inglés", ES_NEUTRAL = "Español neutro", ES_AR = "Español con voseo"))
   factor_names <- c(toponym_id = "Nombre", origin_id = "Origen declarado",
-                    location = "Ubicación del buscador", language_level = "Idioma")
+                    location = "Ubicación del buscador en la API", language_level = "Idioma")
   arg_levels <- c(toponym_id = "MALVINAS", origin_id = "BUENOS_AIRES", location = "AR", language_level = "ES_AR")
   marginal_counts <- function(cases, group, group_levels, factors) {
     rows <- list()
@@ -229,7 +229,7 @@ run_editorial_outputs <- function(data = NULL, root = ".", overwrite = FALSE, ch
   mitigation_plot <- local({
     counts <- mitigation_counts; ranges <- mitigation_ranges
     factors <- c("toponym_id", "origin_id", "location", "language_level")
-    signal_labels <- c("Nombre", "Origen declarado", "Ubicación del buscador", "Idioma")
+    signal_labels <- c("Nombre", "Origen declarado", "Ubicación del buscador\nen la API", "Idioma")
     centers <- setNames(c(10.4, 7.5, 4.6, 1.7), factors)
     offsets <- setNames(c(.55, -.55), arms)
     counts$plot_y <- unname(centers[counts$factor] + offsets[counts$arm])
@@ -490,7 +490,8 @@ run_editorial_outputs <- function(data = NULL, root = ".", overwrite = FALSE, ch
         scale_fill_manual(values = c("FALSE" = "#969DA3", "TRUE" = "#6DBBDE")) +
         scale_x_continuous(limits = c(0, 100), breaks = seq(0, 100, 20), labels = function(x) paste0(x, "%"),
                            expand = expansion(mult = 0)) +
-        scale_y_continuous(limits = c(.95, 8.65), breaks = ranges$y, labels = ranges$signal,
+        scale_y_continuous(limits = c(.95, 8.65), breaks = ranges$y,
+                           labels = sub("buscador en la API", "buscador\nen la API", ranges$signal, fixed = TRUE),
                            expand = expansion(mult = 0)) +
         labs(title = "Elección de Argentina según cada señal",
              subtitle = "Elección forzada · Sin mitigación · 3.600 respuestas\nPorcentajes agrupando todas las demás condiciones",

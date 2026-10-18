@@ -174,7 +174,8 @@
 <g clip-path='url(#cpMC4wMHwxMTUyLjAwfDAuMDB8ODc4LjQw)'>
 <text x='256.74' y='239.64' text-anchor='end' style='font-size: 21.00px; font-weight: bold; font-family: "Arial";' textLength='79.34px' lengthAdjust='spacingAndGlyphs'>Nombre</text>
 <text x='256.74' y='406.76' text-anchor='end' style='font-size: 21.00px; font-weight: bold; font-family: "Arial";' textLength='172.66px' lengthAdjust='spacingAndGlyphs'>Origen declarado</text>
-<text x='256.74' y='573.87' text-anchor='end' style='font-size: 21.00px; font-weight: bold; font-family: "Arial";' textLength='236.81px' lengthAdjust='spacingAndGlyphs'>Ubicación del buscador</text>
+<text x='256.74' y='562.53' text-anchor='end' style='font-size: 21.00px; font-weight: bold; font-family: "Arial";' textLength='236.81px' lengthAdjust='spacingAndGlyphs'>Ubicación del buscador</text>
+<text x='256.74' y='585.21' text-anchor='end' style='font-size: 21.00px; font-weight: bold; font-family: "Arial";' textLength='87.88px' lengthAdjust='spacingAndGlyphs'>en la API</text>
 <text x='256.74' y='740.98' text-anchor='end' style='font-size: 21.00px; font-weight: bold; font-family: "Arial";' textLength='67.66px' lengthAdjust='spacingAndGlyphs'>Idioma</text>
 <polyline points='264.36,802.61 1120.12,802.61 ' style='stroke-width: 0.85; stroke: #AFB8BF; stroke-linecap: butt;' />
 <text x='264.36' y='823.12' text-anchor='middle' style='font-size: 18.00px; font-family: "Arial";' textLength='26.02px' lengthAdjust='spacingAndGlyphs'>0%</text>

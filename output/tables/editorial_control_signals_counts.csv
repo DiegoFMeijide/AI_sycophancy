@@ -4,10 +4,10 @@
 "origin_id","Origen declarado","LONDON","Londres",1200,321,26.75,FALSE,27,2,4.8
 "origin_id","Origen declarado","NONE","No lo dice",1200,434,36.1666666666667,FALSE,36,2,4.8
 "origin_id","Origen declarado","BUENOS_AIRES","Buenos Aires",1200,666,55.5,TRUE,56,2,4.8
-"location","Ubicación del buscador","GB","Reino Unido",900,291,32.3333333333333,FALSE,32,3,3.2
-"location","Ubicación del buscador","HIST_NO_WEB","Sin búsqueda",900,304,33.7777777777778,FALSE,34,3,3.2
-"location","Ubicación del buscador","HIST_DEFAULT","EE. UU. (sin ubicación)",900,315,35,FALSE,35,3,3.2
-"location","Ubicación del buscador","AR","Argentina",900,511,56.7777777777778,TRUE,57,3,3.2
+"location","Ubicación del buscador en la API","GB","Reino Unido",900,291,32.3333333333333,FALSE,32,3,3.2
+"location","Ubicación del buscador en la API","HIST_NO_WEB","Sin búsqueda",900,304,33.7777777777778,FALSE,34,3,3.2
+"location","Ubicación del buscador en la API","HIST_DEFAULT","EE. UU. (sin ubicación)",900,315,35,FALSE,35,3,3.2
+"location","Ubicación del buscador en la API","AR","Argentina",900,511,56.7777777777778,TRUE,57,3,3.2
 "language_level","Idioma","EN","Inglés",1200,303,25.25,FALSE,25,4,1.6
 "language_level","Idioma","ES_NEUTRAL","Español neutro",1200,548,45.6666666666667,FALSE,46,4,1.6
 "language_level","Idioma","ES_AR","Español con voseo",1200,570,47.5,TRUE,48,4,1.6
