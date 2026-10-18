@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "Si utiliza este ejercicio, cite los datos y el código de replicación."
-title: "Señales del usuario y respuestas de GPT sobre Malvinas y Falkland"
+title: "Sycophancy en LLMs: un experimento sobre Malvinas y Falkland"
 authors:
   - family-names: "Fernández Meijide"
     given-names: "Diego"
