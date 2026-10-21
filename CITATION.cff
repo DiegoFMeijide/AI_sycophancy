@@ -8,4 +8,4 @@ version: "2026-10-18"
 date-released: "2026-10-18"
 type: dataset
 abstract: "Datos y código R para reproducir gráficos y tablas de un experimento de 14.400 respuestas de GPT sobre Malvinas y Falkland."
-repository-code: "https://github.com/DiegoFMeijide/confirmation_bias_LLMs"
+repository-code: "https://github.com/DiegoFMeijide/AI_sycophancy"
